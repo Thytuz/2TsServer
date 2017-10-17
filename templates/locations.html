@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='styles/sidenav.css')}}">
+
+    <title>Tracking Things Server</title>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="sidenav">
+        <script src="{{url_for('static', filename='styles/menu.js')}}"></script>
+    </div>
+
+    <div class="main">
+        {% if message is defined %}
+        <div class='alert alert-{{alertlevel}}'>{{message}}</div>
+        {% endif %}
+        <h1>Locations Manager</h1>
+        <fieldset>
+            <legend><i class="fa fa-search" aria-hidden="true"></i> Search</legend>
+            <form class="form-horizontal" action="findlocation" method="post">
+                <div class="form-group">
+                    <label class="control-label col-sm-2" for="id">*Locations: </label>
+                    <div class="col-sm-10">
+                        <select class="form-control" id="id" name="id">
+                            {%for location in locations%}
+                            <option value="{{location.loca_id}}">{{location.loca_room}}</option>
+                            {%endfor%}
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-2"></div>
+                    <div class="col-sm-4">
+                        <button class="btn btn-success btn-block" type="submit">Find</button>
+                    </div>
+                </div>
+            </form>
+        </fieldset>
+        <br>
+        <fieldset>
+            {% if location is defined %}
+            <legend>Edit</legend>
+            <form class="form-horizontal" method="POST" action="editlocation">
+                {% else %}
+                <legend><i class="fa fa-plus" aria-hidden="true"></i> Add</legend>
+                <form class="form-horizontal" method="POST" action="addlocation">
+                    {% endif %}
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-2" for="name">*Name: </label>
+                        <div class="col-sm-10">
+                            {% if location is defined %}
+                            <input class="form-control" required type="text" id="name" name="name"
+                                   value="{{location.loca_room}}">
+                            {% else %}
+                            <input class="form-control" required type="text" id="name" name="name">
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-2"></div>
+                        <div class="col-sm-4">
+                            {% if location is defined %}
+                            <input type="hidden" value="{{location.loca_id}}" name="id">
+                            <button class="btn btn-info btn-block" type="submit"><i class="fa fa-pencil"
+                                                                                    aria-hidden="true"></i>
+                                Update
+                            </button>
+                            {% else %}
+                            <button class="btn btn-success btn-block" type="submit"><i class="fa fa-floppy-o"
+                                                                                       aria-hidden="true"></i>
+                                Save
+                            </button>
+                            {% endif %}
+                        </div>
+                        {% if location is defined %}
+                    </div>
+                </form>
+                {% else %}
+            </form>
+            {% endif %}
+        </fieldset>
+
+        <form class="form-horizontal" action="voltar" method="post">
+            <div class="form-group">
+                <div class="col-sm-2"></div>
+                <div class="col-sm-4">
+                    <button class="btn btn-danger btn-block" type="submit"><i class="fa fa-arrow-left"
+                                                                              aria-hidden="true"></i>
+                        Back
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <script src="{{url_for('static', filename='styles/message.js')}}"></script>
+</div>
+</body>
+</html>
