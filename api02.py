@@ -58,12 +58,12 @@ def inicial():
     return render_template('/inicial.html')
 
 
-@app.route('/about', methods=['POST'])
+@app.route('/about')
 def about():
     return render_template('/about.html')
 
 
-@app.route('/locations', methods=['POST'])
+@app.route('/locations')
 def locations():
     location = Locations()
     locations = location.search_all_locations()
@@ -103,7 +103,7 @@ def editlocation():
         return 'Erro no servidor. Contate o analista responsável!'
 
 
-@app.route('/users', methods=['POST'])
+@app.route('/users')
 def users():
     user = User()
     users = user.search_all_users()
@@ -212,7 +212,7 @@ def voltar():
     return render_template('/inicial.html')
 
 
-@app.route('/things', methods=['POST'])
+@app.route('/things')
 def things():
     return render_template('/things.html')
 
@@ -239,7 +239,7 @@ def addthing():
         return 'Erro no servidor. Contate o analista responsável !!'
 
 
-@app.route('/quit', methods=['POST'])
+@app.route('/quit')
 def quit():
     return render_template('/login.html')
 
