@@ -2,31 +2,52 @@
 <html>
 <head>
     {% include 'header.html' %}
-
+    <link rel="stylesheet" type="text/css" href="{{url_for('static',filename='styles/login.css')}}">
 </head>
-<body>
 
-<div class="container-fluid">
-    {% if message is defined %}
-    <div class='alert alert-{{alertlevel}}'>{{message}}</div>
-    {% endif %}
-    <h2>Sign In</h2>
-    <form class="form-horizontal" method="post" action="/post_login">
-        <div class="form-group">
-            <label for="email">*Email:</label>
-            <input required type="email" class="form-control" name="email" id="email" placeholder="Enter email">
-        </div>
-        <div class="form-group">
-            <label for="password">*Password:</label>
-            <input required type="password" class="form-control" name="password" id="password"
-                   placeholder="Enter password">
-        </div>
-        <div class="form-group">
-            <button type="submit" class="btn btn-success"><i class="fa fa-sign-in" aria-hidden="true"></i> Login
-            </button>
-        </div>
-    </form>
-    <script src="{{url_for('static', filename='styles/message.js')}}"></script>
+<!--<div class="container-fluid">-->
+<!--{% if message is defined %}-->
+<!--<div class='alert alert-{{alertlevel}}'>{{message}}</div>-->
+<!--{% endif %}-->
+<!--<h2>Sign In</h2>-->
+<!--<form class="form-horizontal" method="post" action="/post_login">-->
+<!--<div class="form-group">-->
+<!--<label for="email">*Email:</label>-->
+<!--<input required type="email" class="form-control" name="email" id="email" placeholder="Enter email">-->
+<!--</div>-->
+<!--<div class="form-group">-->
+<!--<label for="password">*Password:</label>-->
+<!--<input required type="password" class="form-control" name="password" id="password"-->
+<!--placeholder="Enter password">-->
+<!--</div>-->
+<!--<div class="form-group">-->
+<!--<button type="submit" class="btn btn-success"><i class="fa fa-sign-in" aria-hidden="true"></i> Login-->
+<!--</button>-->
+<!--</div>-->
+<!--</form>-->
+<!--<script src="{{url_for('static', filename='styles/message.js')}}"></script>-->
+<!--</div>-->
+<body class="align">
+{% if message is defined %}
+<div class='alert alert-{{alertlevel}}'>{{message}}</div>
+{% endif %}
+<div class="grid">
+    <div id="login">
+        <h2><span class="fontawesome-lock"></span>Sign In</h2>
+        <form class="form-horizontal" method="post" action="/post_login">
+            <fieldset>
+                <p><label for="email">E-mail address</label></p>
+                <p><input required type="email" class="form-control" name="email" id="email" placeholder="Enter email">
+                </p>
+                <p><label for="password">Password</label></p>
+                <p><input required type="password" class="form-control" name="password" id="password"
+                          placeholder="Enter password"></p>
+                <button type="submit" class="btn btn-success btn-block"><i class="fa fa-sign-in" aria-hidden="true"></i> Login
+                </button>
+            </fieldset>
+        </form>
+    </div>
 </div>
+<script src="{{url_for('static', filename='styles/message.js')}}"></script>
 </body>
 </html>
