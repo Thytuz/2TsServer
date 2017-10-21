@@ -21,7 +21,7 @@ class Things(ThingsModel):
                                       " FROM patr_bens LEFT JOIN patr_bens_x_localizacao ON pabe_id = pblo_pabe_id"
                                       " LEFT JOIN localizacao AS loca_1 ON loca_1.loca_id = pabe_loca_id"
                                       " LEFT JOIN localizacao AS loca_2 ON loca_2.loca_id = pblo_loca_id"
-                                      " WHERE pabe_num_patr1 = '" + str(nr_things1) + "'")
+                                      " WHERE pabe_excluido = 0 AND pabe_num_patr1 = '" + str(nr_things1) + "'")
             if cursor.rowcount == 0:
                 return False
             data = cursor.fetchone()
@@ -56,7 +56,7 @@ class Things(ThingsModel):
                   " FROM patr_bens LEFT JOIN patr_bens_x_localizacao ON pabe_id = pblo_pabe_id" \
                   " INNER JOIN localizacao AS loca_1 ON loca_1.loca_id = pabe_loca_id" \
                   " LEFT JOIN localizacao AS loca_2 ON loca_2.loca_id = pblo_loca_id" \
-                  " WHERE pabe_etiqueta_ativa = 1 AND loca_1.loca_id ='" + str(loca_id) + "'"
+                  " WHERE pabe_excluido = 0 AND pabe_etiqueta_ativa = 1 AND loca_1.loca_id ='" + str(loca_id) + "'"
             print(sql)
             conn = Connection()
             cursor = conn.execute_sql(sql)
@@ -99,7 +99,7 @@ class Things(ThingsModel):
                                       " LEFT JOIN patr_bens_x_localizacao ON pabe_id = pblo_pabe_id"
                                       " INNER JOIN localizacao AS loca_1 ON loca_1.loca_id = pabe_loca_id"
                                       " LEFT JOIN localizacao AS loca_2 ON loca_2.loca_id = pblo_loca_id"
-                                      " WHERE pabe_etiqueta_ativa = 0 AND pabe_loca_id ='" + str(loca_id) + "'")
+                                      " WHERE pabe_excluido = 0 AND pabe_etiqueta_ativa = 0 AND pabe_loca_id ='" + str(loca_id) + "'")
             if cursor.rowcount == 0:
                 return False
             listThings = []
@@ -138,7 +138,7 @@ class Things(ThingsModel):
                                       " LEFT JOIN patr_bens_x_localizacao ON pabe_id = pblo_pabe_id"
                                       " LEFT JOIN localizacao AS loca_1 ON loca_1.loca_id = pabe_loca_id"
                                       " LEFT JOIN localizacao AS loca_2 ON loca_2.loca_id = pblo_loca_id"
-                                      " WHERE pabe_etiqueta_ativa = 0 ")
+                                      " WHERE pabe_excluido = 0 AND pabe_etiqueta_ativa = 0 ")
             if cursor.rowcount == 0:
                 return False
             listThings = []
@@ -176,7 +176,7 @@ class Things(ThingsModel):
                   " LEFT JOIN patr_bens_x_localizacao ON pabe_id = pblo_pabe_id" \
                   " INNER JOIN localizacao AS loca_1 ON loca_1.loca_id = pabe_loca_id" \
                   " LEFT JOIN localizacao AS loca_2 ON loca_2.loca_id = pblo_loca_id" \
-                  " WHERE pabe_loca_id = '" + str(loca_id) + "'"
+                  " WHERE pabe_excluido = 0 AND pabe_loca_id = '" + str(loca_id) + "'"
             print(sql)
             conn = Connection()
             cursor = conn.execute_sql(sql)
@@ -219,23 +219,6 @@ class Things(ThingsModel):
             print(e)
             conn.rollback()
             return False
-        finally:
-            conn.close_connection()
-
-    def search_locations(self):
-        try:
-            sql = "SELECT * FROM localizacao  ORDER BY loca_sala ASC"
-            conn = Connection()
-            cursor = conn.execute_sql(sql)
-            if cursor.rowcount == 0:
-                return False
-            listLocations = []
-            for data in cursor.fetchall():
-                listLocations.append(LocationModel(loca_id=str(data[0]), loca_room=data[1]))
-            return listLocations
-        except Exception as e:
-            print(e)
-            return 'ERRO'
         finally:
             conn.close_connection()
 
@@ -305,7 +288,7 @@ def search_all_things_actives(self):
                                   " LEFT JOIN patr_bens_x_localizacao ON pabe_id = pblo_pabe_id"
                                   " LEFT JOIN localizacao AS loca_1 ON loca_1.loca_id = pabe_loca_id"
                                   " LEFT JOIN localizacao AS loca_2 ON loca_2.loca_id = pblo_loca_id"
-                                  " WHERE pabe_etiqueta_ativa = 1 ")
+                                  " WHERE pabe_excluido = 0 AND pabe_etiqueta_ativa = 1 ")
         if cursor.rowcount == 0:
             return False
         listThings = []

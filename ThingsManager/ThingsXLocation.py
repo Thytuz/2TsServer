@@ -21,7 +21,7 @@ class ThingsXLocation(object):
                   " FROM patr_bens_x_localizacao INNER JOIN patr_bens ON pabe_id = pblo_pabe_id" \
                   " INNER JOIN localizacao AS loca_1 ON loca_1.loca_id = pabe_loca_id" \
                   " INNER JOIN localizacao AS loca_2 ON loca_2.loca_id = pblo_loca_id" \
-                  " WHERE pblo_loca_id <> '"+str(loca_id)+"' AND pabe_loca_id ='"+str(loca_id)+"'"
+                  " WHERE pabe_excluido = 0 AND pblo_loca_id <> '"+str(loca_id)+"' AND pabe_loca_id ='"+str(loca_id)+"'"
             print(sql)
             conn = Connection()
             cursor = conn.execute_sql(sql)
@@ -75,7 +75,7 @@ class ThingsXLocation(object):
                                       " FROM patr_bens_x_localizacao INNER JOIN patr_bens ON pabe_id = pblo_pabe_id"
                                       " INNER JOIN localizacao AS loca_1 ON loca_1.loca_id = pabe_loca_id"
                                       " INNER JOIN localizacao AS loca_2 ON loca_2.loca_id = pblo_loca_id"
-                                      " WHERE pblo_loca_id ='"+str(loca_id)+"' AND pabe_loca_id <>'"+str(loca_id)+"'")
+                                      " WHERE pabe_excluido = 0 AND pblo_loca_id ='"+str(loca_id)+"' AND pabe_loca_id <>'"+str(loca_id)+"'")
             if cursor.rowcount == 0:
                 return False
             listThings = []
@@ -113,7 +113,7 @@ class ThingsXLocation(object):
 
     def check_thing_location_exists(self, nr_things1):
         try:
-            sql = "SELECT * FROM patr_bens_x_localizacao INNER JOIN patr_bens ON pblo_pabe_id = pabe_id WHERE pabe_num_patr1 =  "+ str(nr_things1)
+            sql = "SELECT * FROM patr_bens_x_localizacao INNER JOIN patr_bens ON pblo_pabe_id = pabe_id WHERE pabe_excluido = 0 AND pabe_num_patr1 =  "+ str(nr_things1)
             conn = Connection()
             cursor = conn.execute_sql(sql)
             if(cursor.rowcount == 0):

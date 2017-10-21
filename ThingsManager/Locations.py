@@ -23,7 +23,7 @@ class Locations(LocationModel):
 
     def search_all_locations(self):
         try:
-            sql = "SELECT * FROM localizacao ORDER BY loca_sala"
+            sql = "SELECT * FROM localizacao WHERE loca_excluido = 0 ORDER BY loca_sala ASC"
             conn = Connection()
             cursor = conn.execute_sql(sql)
 
@@ -43,7 +43,7 @@ class Locations(LocationModel):
 
     def search_location_by_id(self, loca_id):
         try:
-            sql = "SELECT * FROM localizacao WHERE loca_id = " + str(loca_id)
+            sql = "SELECT * FROM localizacao WHERE loca_excluido = 0 AND loca_id = " + str(loca_id)
             conn = Connection()
             cursor = conn.execute_sql(sql)
             data = cursor.fetchone()
@@ -71,3 +71,5 @@ class Locations(LocationModel):
             return False
         finally:
             conn.close_connection()
+
+

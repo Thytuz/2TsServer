@@ -388,8 +388,8 @@ def search_locations(token):
     elif resp == 'ERRO':
         return jsonify({'response': 'Erro ao verificar token'})
 
-    things = Things()
-    response = things.search_locations()
+    location = Locations()
+    response = location.search_all_locations()
     if response == False:
         return jsonify({'response': 'Nenhuma localizacao encontrada'})
     elif response == 'ERRO':

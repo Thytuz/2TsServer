@@ -1,4 +1,6 @@
 import pymysql
+import os
+import datetime
 
 class Connection(object):
     # __server = 'sql10.freemysqlhosting.net'
@@ -6,9 +8,9 @@ class Connection(object):
     # __user = 'sql10190757'
     __user = 'root'
     # __password = 'bqwh8pTxPg'
-    __password = ''
+    __password = 'root'
     # __database = 'sql10190757'
-    __database = 'patrimonioifg'
+    __database = 'patrimonioIFG'
 
     def __init__(self):
         self.db = pymysql.connect(host = Connection.__server, port = 3306, user = Connection.__user, passwd = Connection.__password, db = Connection.__database)
@@ -30,3 +32,4 @@ class Connection(object):
     def rollback(self):
         self.db.rollback()
         return
+
