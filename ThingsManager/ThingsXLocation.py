@@ -167,3 +167,27 @@ class ThingsXLocation(object):
             return 'ERRO'
         finally:
             conn.close_connection()
+
+
+    def get_things_x_location_db(self):
+        try:
+            sql = "SELECT pblo_id, pblo_pabe_id, pblo_loca_id, pblo_usua_id FROM patr_bens_x_localizacao"
+            print(sql)
+            conn = Connection()
+            cursor = conn.execute_sql(sql)
+            if cursor.rowcount == 0:
+                return False
+            listThings = []
+            for data in cursor.fetchall():
+                thingsModel = ThingsXLocationModel(pblo_id=str(data[0]),
+                                                   code_things=str("0" if data[1] == None else data[1]),
+                                                   pblo_loca_id=str("0" if data[2] == None else data[2]),
+                                                   pblo_usua_id=str(data[3]))
+                listThings.append(thingsModel)
+
+            return listThings
+        except Exception as e:
+            print(e)
+            return 'ERRO'
+        finally:
+            conn.close_connection()

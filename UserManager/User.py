@@ -11,7 +11,7 @@ class User(UserModel):
         conn = Connection()
         try:
             cursor = conn.execute_sql(
-                "SELECT * FROM usuarios WHERE usua_email ='" + email + "' AND usua_senha = '" + password + "'")
+                "SELECT * FROM usuarios WHERE usua_excluido = 0 AND usua_email ='" + email + "' AND usua_senha = '" + password + "'")
             if cursor.rowcount == 0:
                 return False
             else:
@@ -28,7 +28,7 @@ class User(UserModel):
     def verify_token(self, token):
         try:
             conn = Connection()
-            cursor = conn.execute_sql("SELECT * FROM usuarios WHERE usua_token = '" + token + "'")
+            cursor = conn.execute_sql("SELECT * FROM usuarios WHERE usua_excluido = 0 AND usua_token = '" + token + "'")
             if cursor.rowcount == 0:
                 return False
             else:
@@ -75,7 +75,7 @@ class User(UserModel):
 
     def search_user_by_id(self, id):
         try:
-            sql = "SELECT * FROM usuarios WHERE usua_id = " + str(id)
+            sql = "SELECT * FROM usuarios WHERE usua_excluido = 0 AND usua_id = " + str(id)
             conn = Connection()
             cursor = conn.execute_sql(sql)
             data = cursor.fetchone()
@@ -91,7 +91,7 @@ class User(UserModel):
 
     def search_all_users(self):
         try:
-            sql = "SELECT * FROM usuarios ORDER BY usua_nome"
+            sql = "SELECT * FROM usuarios WHERE usua_excluido = 0 ORDER BY usua_nome"
             conn = Connection()
             cursor = conn.execute_sql(sql)
 
@@ -101,6 +101,27 @@ class User(UserModel):
             listUsers = []
             for data in cursor.fetchall():
                 userModel = UserModel(id=data[0], name=data[1], email=data[2], permission=data[4])
+                listUsers.append(userModel)
+            return listUsers
+        except Exception as e:
+            print(e)
+            return 'ERRO'
+        finally:
+            conn.close_connection()
+
+
+    def get_users_db(self):
+        try:
+            sql = "SELECT * FROM usuarios"
+            conn = Connection()
+            cursor = conn.execute_sql(sql)
+
+            if (cursor.rowcount == 0):
+                return False
+
+            listUsers = []
+            for data in cursor.fetchall():
+                userModel = UserModel(id=data[0], name=data[1], email=data[2], permission=data[4], token = data[5])
                 listUsers.append(userModel)
             return listUsers
         except Exception as e:

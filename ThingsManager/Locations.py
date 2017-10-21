@@ -73,3 +73,23 @@ class Locations(LocationModel):
             conn.close_connection()
 
 
+
+    def get_all_locations_db(self):
+        try:
+            sql = "SELECT * FROM localizacao"
+            conn = Connection()
+            cursor = conn.execute_sql(sql)
+
+            if (cursor.rowcount == 0):
+                return False
+
+            listLocations = []
+            for data in cursor.fetchall():
+                locationModel = LocationModel(loca_id=data[0], loca_room=data[1])
+                listLocations.append(locationModel)
+            return listLocations
+        except Exception as e:
+            print(e)
+            return 'ERRO'
+        finally:
+            conn.close_connection()
