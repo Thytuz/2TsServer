@@ -2,7 +2,7 @@
 <html>
 <head>
     {% include 'header.html' %}
-    <script type="text/javascript" src="{{ url_for('static', filename='scripts/thingsgrid.js') }}"></script>
+        <script type="text/javascript" src="{{ url_for('static', filename='scripts/thingsgrid.js') }}"></script>
 
 </head>
 <body>
@@ -13,7 +13,7 @@
 
     <div class="main">
         {% if message is defined %}
-        <div class='alert alert-{{alertlevel}}'>{{message}}</div>
+        <div class='alert alert-danger'>{{message}}</div>
         {% endif %}
         <h1>Things Manager</h1>
         <div class="col-sm-12">
@@ -61,7 +61,7 @@
             </thead>
 
             <tbody>
-            {% if things is defined %}
+                    {% if things is defined %}
             {%for thing in things%}
 
             <tr>
@@ -79,6 +79,149 @@
             {% endif %}
 
         </table>
+        <!--<fieldset>-->
+        <!--<legend><i class="fa fa-search" aria-hidden="true"></i> Search</legend>-->
+        <!--<form class="form-horizontal" action="findThing" method="post">-->
+        <!--<div class="form-group">-->
+        <!--<label class="control-label col-sm-2" for="numeroPat">*Thing Number:</label>-->
+        <!--<div class="col-sm-10">-->
+        <!--<input required type="number" class="form-control" id="numeroPat" name="numeroPat">-->
+        <!--</div>-->
+        <!--</div>-->
+        <!--<div class="form-group">-->
+        <!--<div class="col-sm-2">-->
+        <!--</div>-->
+        <!--<div class="col-sm-4">-->
+        <!--<button class="btn btn-success btn-block" type="submit">Find</button>-->
+        <!--</div>-->
+        <!--</div>-->
+        <!--</form>-->
+        <!--</fieldset>-->
+        <!--<br>-->
+        <!--<fieldset>-->
+        <!--{% if thing is defined %}-->
+        <!--<legend>Edit</legend>-->
+        <!--<form class="form-horizontal" method="POST" action="editThing">-->
+        <!--{% else %}-->
+        <!--<legend><i class="fa fa-plus" aria-hidden="true"></i> Add</legend>-->
+        <!--<form class="form-horizontal" method="POST" action="addthing">-->
+        <!--{% endif %}-->
+        <!--<div class="form-group">-->
+        <!--<label class="control-label col-sm-2" for="descricao">*Thing description: </label>-->
+        <!--<div class="col-sm-10">-->
+        <!--{% if thing is defined %}-->
+        <!--<textarea style="resize: none;" class="form-control" rows="5" required type="text"-->
+        <!--id="descricao"-->
+        <!--name="descricao">{{thing.description}}</textarea>-->
+        <!--{% else %}-->
+        <!--<textarea style="resize: none;" class="form-control" rows="5" required type="text"-->
+        <!--id="descricao"-->
+        <!--name="descricao"></textarea>-->
+        <!--{% endif %}-->
+        <!--</div>-->
+        <!--</div>-->
+
+        <!--<div class="form-group">-->
+        <!--<label class="control-label col-sm-2" for="num1">*Number 1: </label>-->
+        <!--<div class="col-sm-10">-->
+        <!--{% if thing is defined %}-->
+        <!--<input class="form-control" required type="number" id="num1" name="num1"-->
+        <!--value="{{thing.nr_things1}}">-->
+        <!--{% else %}-->
+        <!--<input class="form-control" required type="number" id="num1" name="num1">-->
+        <!--{% endif %}-->
+        <!--</div>-->
+        <!--</div>-->
+
+        <!--<div class="form-group">-->
+        <!--<label class="control-label col-sm-2" for="num2">Number 2: </label>-->
+        <!--<div class="col-sm-10">-->
+        <!--{% if thing is defined %}-->
+        <!--<input class="form-control" type="number" id="num2" name="num2"-->
+        <!--value="{{thing.nr_things2}}">-->
+        <!--{% else %}-->
+        <!--<input class="form-control" type="number" id="num2" name="num2">-->
+        <!--{% endif %}-->
+        <!--</div>-->
+        <!--</div>-->
+
+        <!--<div class="form-group">-->
+        <!--<label class="control-label col-sm-2" for="preco">*Price: </label>-->
+        <!--<div class="col-sm-10">-->
+        <!--{% if thing is defined %}-->
+        <!--<input class="form-control" required type="text" id="preco" name="preco"-->
+        <!--value="{{thing.value}}">-->
+        <!--{% else %}-->
+        <!--<input class="form-control" required type="text" id="preco" name="preco">-->
+        <!--{% endif %}-->
+        <!--</div>-->
+        <!--</div>-->
+
+        <!--<div class="form-group">-->
+        <!--<label class="control-label col-sm-2" for="situacao">*Situation: </label>-->
+        <!--<div class="col-sm-10">-->
+        <!--{% if thing is defined %}-->
+        <!--<input class="form-control" required type="text" id="situacao" name="situacao"-->
+        <!--value="{{thing.situation}}">-->
+        <!--{% else %}-->
+        <!--<input class="form-control" required type="text" id="situacao" name="situacao">-->
+        <!--{% endif %}-->
+        <!--</div>-->
+        <!--</div>-->
+
+        <!--<div class="form-group">-->
+        <!--<label class="control-label col-sm-2" for="estado">*State: </label>-->
+        <!--<div class="col-sm-10">-->
+        <!--{% if thing is defined %}-->
+        <!--<input class="form-control" required type="text" id="estado" name="estado"-->
+        <!--value="{{thing.state}}">-->
+        <!--{% else %}-->
+        <!--<input class="form-control" required type="text" id="estado" name="estado">-->
+        <!--{% endif %}-->
+        <!--</div>-->
+        <!--</div>-->
+
+        <!--<div class="form-group">-->
+        <!--<label class="control-label col-sm-2" for="observacao">*Observation: </label>-->
+        <!--<div class="col-sm-10">-->
+        <!--{% if thing is defined %}-->
+        <!--<textarea style="resize: none;" class="form-control" rows="5" required type="text"-->
+        <!--id="observacao" name="observacao">{{thing.note}}</textarea>-->
+        <!--{% else %}-->
+        <!--<textarea style="resize: none;" class="form-control" rows="5" required type="text"-->
+        <!--id="observacao"-->
+        <!--name="observacao"></textarea>-->
+        <!--{% endif %}-->
+        <!--</div>-->
+        <!--</div>-->
+
+        <!--<div class="form-group">-->
+        <!--<div class="col-sm-2">-->
+        <!--</div>-->
+        <!--<div class="col-sm-4">-->
+        <!--{% if thing is defined %}-->
+        <!--<input type="hidden" value="{{thing.code_things}}" name="id">-->
+        <!--<button class="btn btn-info btn-block" type="submit"><i class="fa fa-pencil"-->
+        <!--aria-hidden="true"></i>-->
+        <!--Update-->
+        <!--</button>-->
+        <!--{% else %}-->
+        <!--<button class="btn btn-success btn-block" type="submit"><i class="fa fa-floppy-o"-->
+        <!--aria-hidden="true"></i>-->
+        <!--Save-->
+        <!--</button>-->
+        <!--{% endif %}-->
+        <!--</div>-->
+        <!--</div>-->
+
+        <!--{% if thing is defined %}-->
+        <!--</form>-->
+        <!--{% else %}-->
+        <!--</form>-->
+        <!--{% endif %}-->
+
+        <!--<form class="form-horizontal" action="voltar" method="post">-->
+        <!--<div class="form-group">-->
         <!--<div class="col-sm-2">-->
         <!--</div>-->
         <!--<div class="col-sm-4">-->
@@ -92,7 +235,6 @@
         <!--</fieldset>-->
         <!--</div>-->
     </div>
-    <script src="{{url_for('static', filename='styles/message.js')}}"></script>
 
 </body>
 </html>
