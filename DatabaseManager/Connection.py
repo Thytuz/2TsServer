@@ -8,7 +8,7 @@ class Connection(object):
     # __user = 'sql10190757'
     __user = 'root'
     # __password = 'bqwh8pTxPg'
-    __password = 'root'
+    __password = ''
     # __database = 'sql10190757'
     __database = 'patrimonioIFG'
 

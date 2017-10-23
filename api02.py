@@ -10,12 +10,14 @@ from werkzeug.utils import redirect
 import string
 import random
 
+
 def cria_sessao(id, nome, email, permission, token):
     session['id'] = id
     session['nome'] = nome
     session['email'] = email
     session['permission'] = permission
     session['token'] = token
+
 
 # def get_sessao():
 
@@ -42,7 +44,9 @@ app.secret_key = os.urandom(24)
 
 @app.route('/')
 def index():
-    return render_template('/login.html')
+    if session.get('token') is None:
+        return render_template('/login.html')
+    return render_template('/inicial.html')
 
 
 @app.route('/post_login', methods=['POST'])
@@ -57,24 +61,33 @@ def post_login():
             return render_template('/login.html', message="You have entered an invalid username or password",
                                    alertlevel="danger")
         else:
+            cria_sessao(response.id, response.name, response.email, response.permission, response.token)
             return render_template('/inicial.html', message="Welcome", alertlevel="success", user=response)
     except Exception as e:
         print(e)
-        return "Erro no servidor. Contate o Analista"
+        return render_template('/login.html',
+                               message="A database error has occurred. Contact your system administrator",
+                               alertlevel="danger")
 
 
 @app.route('/inicial')
 def inicial():
+    if session.get('token') is None:
+        return render_template('/login.html', message="You have to login to access this module", alertlevel="warning")
     return render_template('/inicial.html')
 
 
 @app.route('/about')
 def about():
+    if session.get('token') is None:
+        return render_template('/login.html', message="You have to login to access this module", alertlevel="warning")
     return render_template('/about.html')
 
 
 @app.route('/locations')
 def locations():
+    if session.get('token') is None:
+        return render_template('/login.html', message="You have to login to access this module", alertlevel="warning")
     location = Locations()
     locations = location.search_all_locations()
 
@@ -83,6 +96,8 @@ def locations():
 
 @app.route('/findlocation', methods=['POST'])
 def findlocation():
+    if session.get('token') is None:
+        return render_template('/login.html', message="You have to login to access this module", alertlevel="warning")
     id = request.form['id']
     location = Locations()
     locations = location.search_all_locations()
@@ -94,27 +109,38 @@ def findlocation():
             return render_template('/locations.html', locations=locations, location=response)
 
     except Exception as e:
-        return 'Erro no servidor. Contate o analista responsável!'
+        return render_template('/locations.html',
+                               message="A database error has occurred. Contact your system administrator",
+                               alertlevel="danger")
 
 
 @app.route('/editlocation', methods=['POST'])
 def editlocation():
+    if session.get('token') is None:
+        return render_template('/login.html', message="You have to login to access this module", alertlevel="warning")
     location = Locations()
+    locations = location.search_all_locations()
     nome = request.form['name']
     id = request.form['id']
     try:
         response = location.edit_location(id, nome)
         if response == False:
-            return render_template('/locations.html', message="Error updating location", alertlevel="danger")
+            return render_template('/locations.html', message="Error updating location", alertlevel="danger",
+                                   locations=locations)
         else:
-            return render_template('/locations.html', message="Location updated", alertlevel="success")
+            return render_template('/locations.html', message="Location updated", alertlevel="success",
+                                   locations=locations)
 
     except Exception as e:
-        return 'Erro no servidor. Contate o analista responsável!'
+        return render_template('/locations.html',
+                               message="A database error has occurred. Contact your system administrator",
+                               alertlevel="danger")
 
 
 @app.route('/users')
 def users():
+    if session.get('token') is None:
+        return render_template('/login.html', message="You have to login to access this module", alertlevel="warning")
     user = User()
     users = user.search_all_users()
 
@@ -123,43 +149,53 @@ def users():
 
 @app.route('/adduser', methods=['POST'])
 def adduser():
+    if session.get('token') is None:
+        return render_template('/login.html', message="You have to login to access this module", alertlevel="warning")
+    user = User()
+    users = user.search_all_users()
     nome = request.form['name']
     email = request.form['email']
     senha = request.form['password']
     permissao = request.form['permission']
     token = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(9))
 
-    user = User()
-
     try:
         response = user.insert_new_user(nome, email, senha, token, permissao)
         if response == True:
-            return "sucesso"
+            return render_template('/users.html', message="User added successfully", alertlevel="success", users=users)
         else:
-            return "Erro ao cadastrar usuário."
+            return render_template('/users.html', message="Error adding user", alertlevel="danger", users=users)
 
     except Exception as e:
-        return 'Erro no servidor. Contate o analista responsável!'
+        return render_template('/users.html',
+                               message="A database error has occurred. Contact your system administrator",
+                               alertlevel="danger", users=users)
 
 
 @app.route('/findUser', methods=['POST'])
 def findUser():
+    if session.get('token') is None:
+        return render_template('/login.html', message="You have to login to access this module", alertlevel="warning")
     id = request.form['id']
     user = User()
     users = user.search_all_users()
     try:
         response = user.search_user_by_id(id)
         if response == False:
-            return "Erro ao buscar usuário"
+            return render_template('/users.html', message="Error finding user", alertlevel="danger")
         else:
             return render_template('/users.html', users=users, user1=response)
 
     except Exception as e:
-        return 'Erro no servidor. Contate o analista responsável!'
+        return render_template('/users.html',
+                               message="A database error has occurred. Contact your system administrator",
+                               alertlevel="danger")
 
 
 @app.route('/findThing', methods=['POST'])
 def findThing():
+    if session.get('token') is None:
+        return render_template('/login.html', message="You have to login to access this module", alertlevel="warning")
     numThing = request.form['numeroPat']
 
     things = Things()
@@ -167,35 +203,46 @@ def findThing():
         response = things.search_things_by_num1(numThing)
 
         if response == False:
-            return "Nenhuma coisa encontrada com o número informado"
+            return render_template('/things.html', message="No thing found with given number", alertlevel="warning")
         else:
             return render_template('/things.html', thing=response)
     except Exception as e:
-        return 'Erro no servidor. Contate o analista responsável!'
+        return render_template('/things.html',
+                               message="A database error has occurred. Contact your system administrator",
+                               alertlevel="danger")
 
 
 @app.route('/editUser', methods=['POST'])
 def editUser():
+    if session.get('token') is None:
+        return render_template('/login.html', message="You have to login to access this module", alertlevel="warning")
+    user = User()
+
     id = request.form['id1']
     nome = request.form['name']
     email = request.form['email']
     senha = request.form['password']
     permissao = request.form['permission']
 
-    user = User()
+    users = user.search_all_users()
+
     try:
         response = user.edit_user(id, nome, email, senha, permissao)
         if response == False:
-            return "Erro ao atualizar usuário"
+            return render_template('/users.html', message="Error while editing user", alertlevel="danger", users=users)
         else:
-            return "Usuario atualizado com sucesso"
+            return render_template('/users.html', message="User successfully edited", alertlevel="success", users=users)
 
     except Exception as e:
-        return 'Erro no servidor. Contate o analista responsável!'
+        return render_template('/users.html',
+                               message="A database error has occurred. Contact your system administrator",
+                               alertlevel="danger")
 
 
 @app.route('/editThing', methods=['POST'])
 def editThing():
+    if session.get('token') is None:
+        return render_template('/login.html', message="You have to login to access this module", alertlevel="warning")
     id = request.form['id']
     descricao = request.form['descricao']
     num1 = request.form['num1']
@@ -210,25 +257,33 @@ def editThing():
     try:
         response = thing.update_thing2(id, descricao, num1, num2, preco, situacao, estado, observacao)
         if response == True:
-            return "Coisa atualizada com sucesso"
+            return render_template('/things.html', message="Thing successfully edited", alertlevel="success")
         else:
-            return "Erro ao atualizar coisa"
+            return render_template('/things.html', message="Error while editing thing", alertlevel="warning")
     except Exception as e:
-        return 'Erro no servidor. Contate o analista responsável!'
+        return render_template('/things.html',
+                               message="A database error has occurred. Contact your system administrator",
+                               alertlevel="danger")
 
 
 @app.route('/voltar', methods=['POST'])
 def voltar():
+    if session.get('token') is None:
+        return render_template('/login.html', message="You have to login to access this module", alertlevel="warning")
     return render_template('/inicial.html')
 
 
 @app.route('/things')
 def things():
+    if session.get('token') is None:
+        return render_template('/login.html', message="You have to login to access this module", alertlevel="warning")
     return render_template('/things.html')
 
 
 @app.route('/addthing', methods=['POST'])
 def addthing():
+    if session.get('token') is None:
+        return render_template('/login.html', message="You have to login to access this module", alertlevel="warning")
     descricao = request.form['descricao']
     num1 = request.form['num1']
     num2 = request.form['num2']
@@ -241,21 +296,30 @@ def addthing():
     try:
         response = thing.insert_new_thing(num1, num2, descricao, preco, situacao, estado, observacao)
         if response == True:
-            return "Coisa cadastrada com sucesso."
+            return render_template('/things.html',
+                                   message="Thing successfully added",
+                                   alertlevel="success")
         else:
-            return "Erro ao cadastrar coisa."
+            return render_template('/things.html',
+                                   message="Error adding thing",
+                                   alertlevel="danger")
 
     except Exception as e:
-        return 'Erro no servidor. Contate o analista responsável !!'
+        return render_template('/things.html',
+                               message="A database error has occurred. Contact your system administrator",
+                               alertlevel="danger")
 
 
 @app.route('/quit')
 def quit():
+    session.clear()
     return render_template('/login.html')
+
 
 @app.route('/thingsgrid', methods=['get'])
 def thingsgrid():
-
+    if session.get('token') is None:
+        return render_template('/login.html', message="You have to login to access this module", alertlevel="warning")
     acao = request.args.get("acao")
     things = Things()
     thingsXLocation = ThingsXLocation()
@@ -266,7 +330,7 @@ def thingsgrid():
 
         if tipo_busca != '-1':
             if tipo_busca == '4':
-                response  = []
+                response = []
                 dado2 = request.args.get("dado_busca2")
                 response.append(things.search_things_by_num1(dado2))
             elif dado != '-1':
@@ -291,7 +355,8 @@ def thingsgrid():
     else:
         return render_template('/thingsgrid.html', things=response, locations=locations)
 
-#END VIEWS
+
+# END VIEWS
 
 @app.route('/user_autenticate/email=<string:email>&password=<string:password>', methods=['GET'])
 def logar(email, password):
@@ -548,12 +613,13 @@ def search_all_things_actives(token):
     else:
         return json.dumps(para_dict(response))
 
-#Busca dados do banco
+
+# Busca dados do banco
 token_padrao_get_db = "123"
+
 
 @app.route('/get_locations_db/token=<string:token>', methods=['GET'])
 def get_locations_db(token):
-
     if token != token_padrao_get_db:
         return jsonify({'response': 'Token Invalido'})
 
@@ -563,7 +629,6 @@ def get_locations_db(token):
 
 @app.route('/get_things_db/token=<string:token>', methods=['GET'])
 def get_things_db(token):
-
     if token != token_padrao_get_db:
         return jsonify({'response': 'Token Invalido'})
 
@@ -571,9 +636,9 @@ def get_things_db(token):
 
     return json.dumps(para_dict(things.get_all_things_db()))
 
+
 @app.route('/get_things_location_db/token=<string:token>', methods=['GET'])
 def get_things_location_db(token):
-
     if token != token_padrao_get_db:
         return jsonify({'response': 'Token Invalido'})
 
@@ -581,16 +646,15 @@ def get_things_location_db(token):
 
     return json.dumps(para_dict(things_location.get_things_x_location_db()))
 
+
 @app.route('/get_users_db/token=<string:token>', methods=['GET'])
 def get_users_db(token):
-
     if token != token_padrao_get_db:
         return jsonify({'response': 'Token Invalido'})
 
     user = User()
 
     return json.dumps(para_dict(user.get_users_db()))
-
 
 
 # if __name__ == "__main__":
