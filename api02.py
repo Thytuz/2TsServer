@@ -1,5 +1,5 @@
-# import os
-from flask import jsonify, request, Flask, render_template, url_for
+import os
+from flask import jsonify, request, Flask, render_template, url_for, session
 import json
 from SynchronizationManager.ThingsSynchronization import ThingsSynchronization
 from ThingsManager.Locations import Locations
@@ -9,6 +9,15 @@ from UserManager.User import User
 from werkzeug.utils import redirect
 import string
 import random
+
+def cria_sessao(id, nome, email, permission, token):
+    session['id'] = id
+    session['nome'] = nome
+    session['email'] = email
+    session['permission'] = permission
+    session['token'] = token
+
+# def get_sessao():
 
 
 def para_dict(obj):
@@ -28,6 +37,7 @@ def para_dict(obj):
 
 
 app = Flask(__name__)
+app.secret_key = os.urandom(24)
 
 
 @app.route('/')
@@ -243,6 +253,45 @@ def addthing():
 def quit():
     return render_template('/login.html')
 
+@app.route('/thingsgrid', methods=['get'])
+def thingsgrid():
+
+    acao = request.args.get("acao")
+    things = Things()
+    thingsXLocation = ThingsXLocation()
+    response = things.search_all_things()
+    if acao == "search":
+        tipo_busca = request.args.get("tipo_busca")
+        dado = request.args.get("dado_busca")
+
+        if tipo_busca != '-1':
+            if tipo_busca == '4':
+                response  = []
+                dado2 = request.args.get("dado_busca2")
+                response.append(things.search_things_by_num1(dado2))
+            elif dado != '-1':
+                if tipo_busca == '1':
+                    response = things.search_things_by_location(dado)
+
+                elif tipo_busca == '2':
+                    response = thingsXLocation.search_things_over_by_location(dado)
+                elif tipo_busca == '3':
+                    response = thingsXLocation.search_things_missing_by_location(dado)
+    message = ''
+    if response == False:
+        response = []
+        message = "Nenhum item encontrado!"
+    if response == 'ERRO':
+        response = []
+        message = "Erro na busca"
+    location = Locations()
+    locations = location.search_all_locations()
+    if message != '':
+        return render_template('/thingsgrid.html', things=response, locations=locations, message=message)
+    else:
+        return render_template('/thingsgrid.html', things=response, locations=locations)
+
+#END VIEWS
 
 @app.route('/user_autenticate/email=<string:email>&password=<string:password>', methods=['GET'])
 def logar(email, password):

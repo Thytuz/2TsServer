@@ -1,0 +1,240 @@
+<!doctype html>
+<html>
+<head>
+    {% include 'header.html' %}
+        <script type="text/javascript" src="{{ url_for('static', filename='scripts/thingsgrid.js') }}"></script>
+
+</head>
+<body>
+{% include 'menu.html' %}
+
+<div class="container-fluid">
+
+
+    <div class="main">
+        {% if message is defined %}
+        <div class='alert alert-danger'>{{message}}</div>
+        {% endif %}
+        <h1>Things Manager</h1>
+        <div class="col-sm-12">
+            <button type="button" id="btn_novo" class="btn btn-success">Novo Item</button>
+        </div>
+        <div class="form-group col-sm-3">
+            <fieldset>
+                <legend>Pesquisa</legend>
+                <form action="thingsgrid" method="get">
+                    <select class="form-control" id="tipo_busca" name="tipo_busca">
+                        <option value="-1">Selecione o tipo de busca</option>
+                        <option value="1">Busca itens por setor</option>
+                        <option value="2">Busca itens sobrando por setor</option>
+                        <option value="3">Busca itens faltando por setor</option>
+                        <option value="4">Busca iten por número</option>
+                    </select>
+
+                    <select class="form-control" id="dado_busca" name="dado_busca">
+                        <option value="-1">Selecione o setor</option>
+
+                        {%for location in locations%}
+                        <option value="{{location.loca_id}}">{{location.loca_room}}</option>
+                        {%endfor%}
+                    </select>
+                    <div class="form-group" id="dado_busca2" style="display:none;">
+                        <label for="dado_b">Informe o número do item</label>
+                        <input type="text" class="form-control" id="dado_b" name="dado_busca2">
+                    </div>
+                    <button type="submit" name="acao" value="search" id="btn_pesquisar" class="btn btn-success">
+                        Pesquisar
+                    </button>
+            </fieldset>
+        </div>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Nº</th>
+                <th>Descrição</th>
+                <th>Situação</th>
+                <th>Estado</th>
+                <th>Setor</th>
+                <th>Setor Atual</th>
+                <th>Ativo</th>
+            </tr>
+            </thead>
+
+            <tbody>
+                    {% if things is defined %}
+            {%for thing in things%}
+
+            <tr>
+                <th scope="row">{{thing.nr_things1}}</th>
+                <td>{{thing.description}}</td>
+                <td>{{thing.situation}}</td>
+                <td>{{thing.state}}</td>
+                <td>{{thing.location.loca_room}}</td>
+                <td>{{thing.location_current.loca_room}}</td>
+                <td>{{thing.tag_activated}}</td>
+            </tr>
+            {%endfor%}
+            </tbody>
+            {% else %}
+            {% endif %}
+
+        </table>
+        <!--<fieldset>-->
+        <!--<legend><i class="fa fa-search" aria-hidden="true"></i> Search</legend>-->
+        <!--<form class="form-horizontal" action="findThing" method="post">-->
+        <!--<div class="form-group">-->
+        <!--<label class="control-label col-sm-2" for="numeroPat">*Thing Number:</label>-->
+        <!--<div class="col-sm-10">-->
+        <!--<input required type="number" class="form-control" id="numeroPat" name="numeroPat">-->
+        <!--</div>-->
+        <!--</div>-->
+        <!--<div class="form-group">-->
+        <!--<div class="col-sm-2">-->
+        <!--</div>-->
+        <!--<div class="col-sm-4">-->
+        <!--<button class="btn btn-success btn-block" type="submit">Find</button>-->
+        <!--</div>-->
+        <!--</div>-->
+        <!--</form>-->
+        <!--</fieldset>-->
+        <!--<br>-->
+        <!--<fieldset>-->
+        <!--{% if thing is defined %}-->
+        <!--<legend>Edit</legend>-->
+        <!--<form class="form-horizontal" method="POST" action="editThing">-->
+        <!--{% else %}-->
+        <!--<legend><i class="fa fa-plus" aria-hidden="true"></i> Add</legend>-->
+        <!--<form class="form-horizontal" method="POST" action="addthing">-->
+        <!--{% endif %}-->
+        <!--<div class="form-group">-->
+        <!--<label class="control-label col-sm-2" for="descricao">*Thing description: </label>-->
+        <!--<div class="col-sm-10">-->
+        <!--{% if thing is defined %}-->
+        <!--<textarea style="resize: none;" class="form-control" rows="5" required type="text"-->
+        <!--id="descricao"-->
+        <!--name="descricao">{{thing.description}}</textarea>-->
+        <!--{% else %}-->
+        <!--<textarea style="resize: none;" class="form-control" rows="5" required type="text"-->
+        <!--id="descricao"-->
+        <!--name="descricao"></textarea>-->
+        <!--{% endif %}-->
+        <!--</div>-->
+        <!--</div>-->
+
+        <!--<div class="form-group">-->
+        <!--<label class="control-label col-sm-2" for="num1">*Number 1: </label>-->
+        <!--<div class="col-sm-10">-->
+        <!--{% if thing is defined %}-->
+        <!--<input class="form-control" required type="number" id="num1" name="num1"-->
+        <!--value="{{thing.nr_things1}}">-->
+        <!--{% else %}-->
+        <!--<input class="form-control" required type="number" id="num1" name="num1">-->
+        <!--{% endif %}-->
+        <!--</div>-->
+        <!--</div>-->
+
+        <!--<div class="form-group">-->
+        <!--<label class="control-label col-sm-2" for="num2">Number 2: </label>-->
+        <!--<div class="col-sm-10">-->
+        <!--{% if thing is defined %}-->
+        <!--<input class="form-control" type="number" id="num2" name="num2"-->
+        <!--value="{{thing.nr_things2}}">-->
+        <!--{% else %}-->
+        <!--<input class="form-control" type="number" id="num2" name="num2">-->
+        <!--{% endif %}-->
+        <!--</div>-->
+        <!--</div>-->
+
+        <!--<div class="form-group">-->
+        <!--<label class="control-label col-sm-2" for="preco">*Price: </label>-->
+        <!--<div class="col-sm-10">-->
+        <!--{% if thing is defined %}-->
+        <!--<input class="form-control" required type="text" id="preco" name="preco"-->
+        <!--value="{{thing.value}}">-->
+        <!--{% else %}-->
+        <!--<input class="form-control" required type="text" id="preco" name="preco">-->
+        <!--{% endif %}-->
+        <!--</div>-->
+        <!--</div>-->
+
+        <!--<div class="form-group">-->
+        <!--<label class="control-label col-sm-2" for="situacao">*Situation: </label>-->
+        <!--<div class="col-sm-10">-->
+        <!--{% if thing is defined %}-->
+        <!--<input class="form-control" required type="text" id="situacao" name="situacao"-->
+        <!--value="{{thing.situation}}">-->
+        <!--{% else %}-->
+        <!--<input class="form-control" required type="text" id="situacao" name="situacao">-->
+        <!--{% endif %}-->
+        <!--</div>-->
+        <!--</div>-->
+
+        <!--<div class="form-group">-->
+        <!--<label class="control-label col-sm-2" for="estado">*State: </label>-->
+        <!--<div class="col-sm-10">-->
+        <!--{% if thing is defined %}-->
+        <!--<input class="form-control" required type="text" id="estado" name="estado"-->
+        <!--value="{{thing.state}}">-->
+        <!--{% else %}-->
+        <!--<input class="form-control" required type="text" id="estado" name="estado">-->
+        <!--{% endif %}-->
+        <!--</div>-->
+        <!--</div>-->
+
+        <!--<div class="form-group">-->
+        <!--<label class="control-label col-sm-2" for="observacao">*Observation: </label>-->
+        <!--<div class="col-sm-10">-->
+        <!--{% if thing is defined %}-->
+        <!--<textarea style="resize: none;" class="form-control" rows="5" required type="text"-->
+        <!--id="observacao" name="observacao">{{thing.note}}</textarea>-->
+        <!--{% else %}-->
+        <!--<textarea style="resize: none;" class="form-control" rows="5" required type="text"-->
+        <!--id="observacao"-->
+        <!--name="observacao"></textarea>-->
+        <!--{% endif %}-->
+        <!--</div>-->
+        <!--</div>-->
+
+        <!--<div class="form-group">-->
+        <!--<div class="col-sm-2">-->
+        <!--</div>-->
+        <!--<div class="col-sm-4">-->
+        <!--{% if thing is defined %}-->
+        <!--<input type="hidden" value="{{thing.code_things}}" name="id">-->
+        <!--<button class="btn btn-info btn-block" type="submit"><i class="fa fa-pencil"-->
+        <!--aria-hidden="true"></i>-->
+        <!--Update-->
+        <!--</button>-->
+        <!--{% else %}-->
+        <!--<button class="btn btn-success btn-block" type="submit"><i class="fa fa-floppy-o"-->
+        <!--aria-hidden="true"></i>-->
+        <!--Save-->
+        <!--</button>-->
+        <!--{% endif %}-->
+        <!--</div>-->
+        <!--</div>-->
+
+        <!--{% if thing is defined %}-->
+        <!--</form>-->
+        <!--{% else %}-->
+        <!--</form>-->
+        <!--{% endif %}-->
+
+        <!--<form class="form-horizontal" action="voltar" method="post">-->
+        <!--<div class="form-group">-->
+        <!--<div class="col-sm-2">-->
+        <!--</div>-->
+        <!--<div class="col-sm-4">-->
+        <!--<button class="btn btn-danger btn-block" type="submit"><i class="fa fa-arrow-left"-->
+        <!--aria-hidden="true"></i>-->
+        <!--Back-->
+        <!--</button>-->
+        <!--</div>-->
+        <!--</div>-->
+        <!--</form>-->
+        <!--</fieldset>-->
+        <!--</div>-->
+    </div>
+
+</body>
+</html>
