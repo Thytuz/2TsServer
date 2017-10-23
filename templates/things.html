@@ -10,7 +10,7 @@
 
     <div class="main">
         {% if message is defined %}
-        <div class='alert alert-danger'>{{message}}</div>
+        <div class='alert alert-{{alertlevel}}'>{{message}}</div>
         {% endif %}
         <h1>Things Manager</h1>
         <fieldset>
@@ -168,6 +168,7 @@
             </form>
         </fieldset>
     </div>
+    <script src="{{url_for('static', filename='styles/message.js')}}"></script>
 </div>
 </body>
 </html>

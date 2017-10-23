@@ -10,7 +10,7 @@
 
     <div class="main">
         {% if message is defined %}
-        <div class='alert alert-danger'>{{message}}</div>
+        <div class='alert alert-{{alertlevel}}'>{{message}}</div>
         {% endif %}
         <h1> Users Manager </h1>
 
@@ -125,6 +125,7 @@
             </div>
         </form>
     </div>
+    <script src="{{url_for('static', filename='styles/message.js')}}"></script>
 </div>
 
 </body>

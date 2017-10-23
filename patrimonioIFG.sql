@@ -53,7 +53,8 @@ INSERT INTO `localizacao` (`loca_id`, `loca_sala`, `loca_data_atualizacao`, `loc
 --
 
 CREATE TABLE `patr_bens` (
-  `pabe_id` int(11) NOT NULL,
+  `pabe_id` int(11) NOT NULL AUTO_INCREMENT,
+  PRIMARY KEY(pabe_id),
   `pabe_num_patr1` decimal(10,0) DEFAULT NULL,
   `pabe_num_patr2` decimal(10,0) DEFAULT NULL,
   `pabe_descricao` varchar(100) DEFAULT NULL,
@@ -5654,7 +5655,6 @@ ALTER TABLE `localizacao`
 -- Indexes for table `patr_bens`
 --
 ALTER TABLE `patr_bens`
-  ADD PRIMARY KEY (`pabe_id`),
   ADD KEY `fk_patr_bens_localizacao_idx` (`pabe_loca_id`);
 
 --
