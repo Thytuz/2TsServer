@@ -1,6 +1,10 @@
 $(function(){
-    $("#btn_novo").click(function(){
-        window.location = "/things";
+
+    $('#tabela').DataTable( {
+        "pagingType": "full_numbers"
+    } );
+    $(document).load(function(){
+        alert("ee");
     })
     var tipo_busca = getUrlParameter('tipo_busca');
     $("#tipo_busca").val(tipo_busca);
