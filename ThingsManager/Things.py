@@ -57,10 +57,8 @@ class Things(ThingsModel):
                   " INNER JOIN localizacao AS loca_1 ON loca_1.loca_id = pabe_loca_id" \
                   " LEFT JOIN localizacao AS loca_2 ON loca_2.loca_id = pblo_loca_id" \
                   " WHERE pabe_excluido = 0 AND pabe_etiqueta_ativa = 1 AND loca_1.loca_id ='" + str(loca_id) + "'"
-            print(sql)
             conn = Connection()
             cursor = conn.execute_sql(sql)
-            print()
             if cursor.rowcount == 0:
                 return False
             listThings = []
@@ -80,7 +78,6 @@ class Things(ThingsModel):
                                           tag_activated=str("0" if data[11] == None else data[11]),
                                           location_current=location_current)
                 listThings.append(thingsModel)
-                print(thingsModel.nr_things2)
             return listThings
         except Exception as e:
             print(e)
@@ -99,7 +96,8 @@ class Things(ThingsModel):
                                       " LEFT JOIN patr_bens_x_localizacao ON pabe_id = pblo_pabe_id"
                                       " INNER JOIN localizacao AS loca_1 ON loca_1.loca_id = pabe_loca_id"
                                       " LEFT JOIN localizacao AS loca_2 ON loca_2.loca_id = pblo_loca_id"
-                                      " WHERE pabe_excluido = 0 AND pabe_etiqueta_ativa = 0 AND pabe_loca_id ='" + str(loca_id) + "'")
+                                      " WHERE pabe_excluido = 0 AND pabe_etiqueta_ativa = 0 AND pabe_loca_id ='" + str(
+                loca_id) + "'")
             if cursor.rowcount == 0:
                 return False
             listThings = []
@@ -119,7 +117,6 @@ class Things(ThingsModel):
                                           tag_activated=str("0" if data[11] == None else data[11]),
                                           location_current=location_current)
                 listThings.append(thingsModel)
-                print(thingsModel.nr_things2)
             return listThings
         except Exception as e:
             print(e)
@@ -158,7 +155,6 @@ class Things(ThingsModel):
                                           tag_activated=str("0" if data[11] == None else data[11]),
                                           location_current=location_current)
                 listThings.append(thingsModel)
-                print(thingsModel.nr_things2)
             return listThings
         except Exception as e:
             print(e)
@@ -177,10 +173,8 @@ class Things(ThingsModel):
                   " INNER JOIN localizacao AS loca_1 ON loca_1.loca_id = pabe_loca_id" \
                   " LEFT JOIN localizacao AS loca_2 ON loca_2.loca_id = pblo_loca_id" \
                   " WHERE pabe_excluido = 0 AND pabe_loca_id = '" + str(loca_id) + "'"
-            print(sql)
             conn = Connection()
             cursor = conn.execute_sql(sql)
-            print()
             if cursor.rowcount == 0:
                 return False
             listThings = []
@@ -200,7 +194,6 @@ class Things(ThingsModel):
                                           tag_activated=str("0" if data[11] == None else data[11]),
                                           location_current=location_current)
                 listThings.append(thingsModel)
-                print(thingsModel.nr_things2)
             return listThings
         except Exception as e:
             print(e)
@@ -245,7 +238,6 @@ class Things(ThingsModel):
                 price) + "', pabe_dt_cadastro = CURRENT_TIMESTAMP(), pabe_situacao = '" + str(
                 situation) + "', pabe_estado = '" + str(state) + "', pabe_observacao = '" + str(
                 note) + "' WHERE pabe_id = '" + str(code_things) + "'"
-            print(sql)
             conn = Connection()
             conn.execute_sql(sql)
             conn.commit()
@@ -264,7 +256,6 @@ class Things(ThingsModel):
                 thingNum1) + "','" + str(thingNum2) + "','" + str(thingName) + "','" + str(
                 thingPrice) + "', CURRENT_TIMESTAMP() ,'" + str(thingSituation) + "','" + str(
                 thingCondition) + "','" + str(thingObservation) + "', '0')"
-            print(sql)
             conn = Connection()
             conn.execute_sql(sql)
             conn.commit()
@@ -275,7 +266,6 @@ class Things(ThingsModel):
             return False
         finally:
             conn.close_connection()
-
 
     def search_all_things_actives(self):
         try:
@@ -308,14 +298,12 @@ class Things(ThingsModel):
                                           tag_activated=str("0" if data[11] == None else data[11]),
                                           location_current=location_current)
                 listThings.append(thingsModel)
-                print(thingsModel.nr_things2)
             return listThings
         except Exception as e:
             print(e)
             return 'ERRO'
         finally:
             conn.close_connection()
-
 
     def get_all_things_db(self):
         try:
@@ -379,7 +367,6 @@ class Things(ThingsModel):
                                           tag_activated=str("0" if data[11] == None else data[11]),
                                           location_current=location_current)
                 listThings.append(thingsModel)
-                print(thingsModel.nr_things2)
             return listThings
         except Exception as e:
             print(e)

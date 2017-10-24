@@ -344,14 +344,15 @@ def thingsgrid():
     message = ''
     if response == False:
         response = []
-        message = "Nenhum item encontrado!"
+        message = "No thing found!"
     if response == 'ERRO':
         response = []
-        message = "Erro na busca"
+        message = "Error while searching"
     location = Locations()
     locations = location.search_all_locations()
     if message != '':
-        return render_template('/thingsgrid.html', things=response, locations=locations, message=message)
+        return render_template('/thingsgrid.html', things=response, locations=locations, message=message,
+                               alertlevel="warning")
     else:
         return render_template('/thingsgrid.html', things=response, locations=locations)
 
