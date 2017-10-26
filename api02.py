@@ -318,21 +318,29 @@ def quit():
 
 @app.route('/thingsgrid', methods=['get'])
 def thingsgrid():
+
     if session.get('token') is None:
         return render_template('/login.html', message="You have to login to access this module", alertlevel="warning")
     acao = request.args.get("acao")
+    message = ''
     things = Things()
     thingsXLocation = ThingsXLocation()
     response = things.search_all_things()
     if acao == "search":
         tipo_busca = request.args.get("tipo_busca")
         dado = request.args.get("dado_busca")
-
+        print(tipo_busca)
         if tipo_busca != '-1':
             if tipo_busca == '4':
                 response = []
                 dado2 = request.args.get("dado_busca2")
-                response.append(things.search_things_by_num1(dado2))
+                resp = things.search_things_by_num1(dado2)
+                if resp == False:
+                    message = "No thing found!"
+                elif resp == 'ERRO':
+                    message = 'Ocorreu um erro no servidor'
+                else:
+                    response.append(resp)
             elif dado != '-1':
                 if tipo_busca == '1':
                     response = things.search_things_by_location(dado)
@@ -341,7 +349,6 @@ def thingsgrid():
                     response = thingsXLocation.search_things_over_by_location(dado)
                 elif tipo_busca == '3':
                     response = thingsXLocation.search_things_missing_by_location(dado)
-    message = ''
     if response == False:
         response = []
         message = "No thing found!"
@@ -350,6 +357,7 @@ def thingsgrid():
         message = "Error while searching"
     location = Locations()
     locations = location.search_all_locations()
+
     if message != '':
         return render_template('/thingsgrid.html', things=response, locations=locations, message=message,
                                alertlevel="warning")
