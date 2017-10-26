@@ -1,13 +1,31 @@
 <!doctype html>
 <html>
+<style>
+#page {
+    display: none;
+}
+#loading {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(192, 192, 192, 0.5);
+    background-image: url("http://i.stack.imgur.com/MnyxU.gif");
+    background-repeat: no-repeat;
+    background-position: center;
+}
+</style>
 <head>
     {% include 'header.html' %}
     <script type="text/javascript" src="{{ url_for('static', filename='scripts/thingsgrid.js') }}"></script>
     <script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
     <link href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css">
-
 </head>
-<body>
+<div id="loading"></div>
+<body id="page">
 {% include 'menu.html' %}
 
 <div class="container-fluid">
@@ -22,7 +40,7 @@
                 <div class="form-group">
                     <div class="col-sm-2"></div>
                     <div class="col-sm-4">
-                        <a href="/things" class="btn btn-success btn-block">Add new thing</a>
+                        <a href="/things" class="btn btn-success btn-block"><i class="fa fa-plus" aria-hidden="true"></i> Add new thing</a>
                     </div>
                 </div>
             </form>
@@ -63,14 +81,14 @@
                     <div class="col-sm-2"></div>
                     <div class="col-sm-4">
                         <button type="submit" name="acao" value="search" id="btn_pesquisar"
-                                class="btn btn-success btn-block"> Find
+                                class="btn btn-success btn-block"><i class="fa fa-search" aria-hidden="true"></i> Find
                         </button>
                     </div>
                 </div>
             </form>
         </fieldset>
         <br>
-        <div class="table-resposive">
+        <div class="table-responsive">
             <table id="tabela">
                 <thead>
                 <tr>
@@ -97,13 +115,14 @@
                     <td>{{thing.location.loca_room}}</td>
                     <td>{{thing.location_current.loca_room}}</td>
                     <td>{{thing.tag_activated}}</td>
-                    <td><form action="findThing" method="post">
-                        <input type="hidden" name="numeroPat" value="{{thing.nr_things1}}">
+                    <td>
+                        <form action="findThing" method="post">
+                            <input type="hidden" name="numeroPat" value="{{thing.nr_things1}}">
 
-                        <button type="submit" class="btn btn-default btn-sm">
-                           <i class="fa fa-pencil" aria-hidden="true"></i>
-                        </button>
-                    </form>
+                            <button type="submit" class="btn btn-default btn-sm">
+                                <i class="fa fa-pencil" aria-hidden="true"></i>
+                            </button>
+                        </form>
                     </td>
                 </tr>
                 {%endfor%}
@@ -115,6 +134,13 @@
         </div>
     </div>
     <script src="{{url_for('static', filename='styles/message.js')}}"></script>
+    <script>
+        $(document).ready(function(){
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('page').style.display = 'block';
+        });
+
+    </script>
 </div>
 </body>
 </html>

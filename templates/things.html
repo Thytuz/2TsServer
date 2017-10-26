@@ -130,21 +130,28 @@
                     </div>
 
                     <div class="form-group">
-                        <div class="col-sm-2">
-                        </div>
-                        <div class="col-sm-4">
-                            {% if thing is defined %}
-                            <input type="hidden" value="{{thing.code_things}}" name="id">
-                            <button class="btn btn-info btn-block" type="submit"><i class="fa fa-pencil"
-                                                                                    aria-hidden="true"></i>
-                                Update
-                            </button>
-                            {% else %}
-                            <button class="btn btn-success btn-block" type="submit"><i class="fa fa-floppy-o"
-                                                                                       aria-hidden="true"></i>
-                                Save
-                            </button>
-                            {% endif %}
+                        <div class="row" style="margin: 0px;">
+                            <div class="col-sm-2"></div>
+                            <div class="col-sm-4">
+                                {% if thing is defined %}
+                                <input type="hidden" value="{{thing.code_things}}" name="id">
+                                <button class="btn btn-info btn-block" type="submit"><i class="fa fa-pencil"
+                                                                                        aria-hidden="true"></i>
+                                    Update
+                                </button>
+                                {% else %}
+                                <button class="btn btn-success btn-block" type="submit"><i class="fa fa-floppy-o"
+                                                                                           aria-hidden="true"></i>
+                                    Save
+                                </button>
+                                {% endif %}
+                            </div>
+                            <div class="col-sm-4">
+                                <a class="btn btn-danger btn-block" href="/thingsgrid"><i class="fa fa-arrow-left"
+                                                                                          aria-hidden="true"></i>
+                                    Back
+                                </a>
+                            </div>
                         </div>
                     </div>
 
@@ -154,18 +161,7 @@
             </form>
             {% endif %}
 
-            <form class="form-horizontal" action="voltar" method="post">
-                <div class="form-group">
-                    <div class="col-sm-2">
-                    </div>
-                    <div class="col-sm-4">
-                        <button class="btn btn-danger btn-block" type="submit"><i class="fa fa-arrow-left"
-                                                                                  aria-hidden="true"></i>
-                            Back
-                        </button>
-                    </div>
-                </div>
-            </form>
+
         </fieldset>
     </div>
     <script src="{{url_for('static', filename='styles/message.js')}}"></script>

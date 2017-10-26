@@ -89,41 +89,37 @@
                     </div>
 
                     <div class="form-group">
-                        <div class="col-sm-2"></div>
-                        <div class="col-sm-4">
-                            {% if user1 is defined %}
-                            <input type="hidden" value="{{user1.id}}" name="id1">
-                            <button class="btn btn-info btn-block" type="submit"><i class="fa fa-pencil"
-                                                                                    aria-hidden="true"></i>
-                                Update
-                            </button>
-                            {% else %}
-                            <button class="btn btn-success btn-block" type="submit"><i class="fa fa-floppy-o"
-                                                                                       aria-hidden="true"></i>
-                                Save
-                            </button>
-                            {% endif %}
+                        <div class="row" style="margin: 0px;">
+                            <div class="col-sm-2"></div>
+                            <div class="col-sm-4">
+                                {% if user1 is defined %}
+                                <input type="hidden" value="{{user1.id}}" name="id1">
+                                <button class="btn btn-info btn-block" type="submit"><i class="fa fa-pencil"
+                                                                                        aria-hidden="true"></i>
+                                    Update
+                                </button>
+                                {% else %}
+                                <button class="btn btn-success btn-block" type="submit"><i class="fa fa-floppy-o"
+                                                                                           aria-hidden="true"></i>
+                                    Save
+                                </button>
+                                {% endif %}
+                            </div>
+                            <div class="col-sm-4">
+                                <a class="btn btn-danger btn-block" href="/"><i class="fa fa-arrow-left"
+                                                                                          aria-hidden="true"></i>
+                                    Back
+                                </a>
+                            </div>
                         </div>
-                        {% if user1 is defined %}
                     </div>
+                    {% if user1 is defined %}
                 </form>
                 {% else %}
             </form>
             {% endif %}
         </fieldset>
 
-        <form class="form-horizontal" action="voltar" method="post">
-            <div class="form-group">
-                <div class="col-sm-2">
-                </div>
-                <div class="col-sm-4">
-                    <button class="btn btn-danger btn-block" type="submit"><i class="fa fa-arrow-left"
-                                                                              aria-hidden="true"></i>
-                        Back
-                    </button>
-                </div>
-            </div>
-        </form>
     </div>
     <script src="{{url_for('static', filename='styles/message.js')}}"></script>
 </div>
