@@ -40,7 +40,8 @@
                 <div class="form-group">
                     <div class="col-sm-2"></div>
                     <div class="col-sm-4">
-                        <a href="/things" class="btn btn-success btn-block"><i class="fa fa-plus" aria-hidden="true"></i> Add new thing</a>
+                        <a href="/things" class="btn btn-success btn-block"><i class="fa fa-plus"
+                                                                               aria-hidden="true"></i> Add new thing</a>
                     </div>
                 </div>
             </form>
@@ -88,50 +89,67 @@
             </form>
         </fieldset>
         <br>
-        <div class="table-responsive">
-            <table id="tabela">
-                <thead>
-                <tr>
-                    <th>#</th>
-                    <th>Description</th>
-                    <th>Situation</th>
-                    <th>State</th>
-                    <th>Location</th>
-                    <th>Actual Location</th>
-                    <th>Active</th>
-                    <th>Action</th>
-                </tr>
-                </thead>
+        <fieldset>
+            <legend><i class="fa fa-archive" aria-hidden="true"></i> Things</legend>
+            <div class="table-responsive">
+                <table id="tabela">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Description</th>
+                        <th>Situation</th>
+                        <th>State</th>
+                        <th>Location</th>
+                        <th>Actual Location</th>
+                        <th>Active</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
 
-                <tbody>
-                {% if things is defined %}
-                {%for thing in things%}
+                    <tbody>
+                    {% if things is defined %}
+                    {%for thing in things%}
 
-                <tr>
-                    <th scope="row">{{thing.nr_things1}}</th>
-                    <td>{{thing.description}}</td>
-                    <td>{{thing.situation}}</td>
-                    <td>{{thing.state}}</td>
-                    <td>{{thing.location.loca_room}}</td>
-                    <td>{{thing.location_current.loca_room}}</td>
-                    <td>{{thing.tag_activated}}</td>
-                    <td>
-                        <form action="findThing" method="post">
-                            <input type="hidden" name="numeroPat" value="{{thing.nr_things1}}">
+                    <tr>
+                        <th scope="row">{{thing.nr_things1}}</th>
+                        <td>{{thing.description}}</td>
+                        <td>{{thing.situation}}</td>
+                        <td>{{thing.state}}</td>
+                        <td>{{thing.location.loca_room}}</td>
+                        <td>{{thing.location_current.loca_room}}</td>
+                        <td>{{thing.tag_activated}}</td>
+                        <td>
+                            <form action="findThing" method="post">
+                                <input type="hidden" name="numeroPat" value="{{thing.nr_things1}}">
 
-                            <button type="submit" class="btn btn-default btn-sm">
-                                <i class="fa fa-pencil" aria-hidden="true"></i>
-                            </button>
-                        </form>
-                    </td>
-                </tr>
-                {%endfor%}
-                </tbody>
-                {% else %}
-                {% endif %}
+                                <button type="submit" class="btn btn-default btn-sm">
+                                    <i class="fa fa-pencil" aria-hidden="true"></i>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    {%endfor%}
+                    </tbody>
+                    {% else %}
+                    {% endif %}
 
-            </table>
-        </div>
+                </table>
+            </div>
+            <br>
+            <form class="form-horizontal" method="">
+                <div class="form-group">
+                    <div class="row" style="margin: 0px;">
+                        <div class="col-sm-2"></div>
+                        <div class="col-sm-4">
+                            <a class="btn btn-danger btn-block" href="/"><i class="fa fa-arrow-left"
+                                                                            aria-hidden="true"></i>
+                                Back
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </fieldset>
     </div>
     <script src="{{url_for('static', filename='styles/message.js')}}"></script>
     <script>
@@ -139,7 +157,6 @@
             document.getElementById('loading').style.display = 'none';
             document.getElementById('page').style.display = 'block';
         });
-
     </script>
 </div>
 </body>
