@@ -116,13 +116,13 @@
                     </div>
 
                     <div class="form-group">
-                        <label class="control-label col-sm-2" for="observacao">*Observation: </label>
+                        <label class="control-label col-sm-2" for="observacao">Observation: </label>
                         <div class="col-sm-10">
                             {% if thing is defined %}
-                            <textarea style="resize: none;" class="form-control" rows="5" required type="text"
+                            <textarea style="resize: none;" class="form-control" rows="5" type="text"
                                       id="observacao" name="observacao">{{thing.note}}</textarea>
                             {% else %}
-                            <textarea style="resize: none;" class="form-control" rows="5" required type="text"
+                            <textarea style="resize: none;" class="form-control" rows="5" type="text"
                                       id="observacao"
                                       name="observacao"></textarea>
                             {% endif %}
