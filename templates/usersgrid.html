@@ -1,0 +1,127 @@
+<!doctype html>
+<html>
+<style>
+#page {
+    display: none;
+}
+#loading {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(192, 192, 192, 0.5);
+    background-image: url("http://i.stack.imgur.com/MnyxU.gif");
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+
+
+
+</style>
+<head>
+    {% include 'header.html' %}
+    <script type="text/javascript" src="{{ url_for('static', filename='scripts/grid.js') }}"></script>
+    <script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+    <link href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css">
+</head>
+<div id="loading"></div>
+<body id="page">
+{% include 'menu.html' %}
+
+<div class="container-fluid">
+    <div class="main">
+        {% if message is defined %}
+        <div class='alert alert-{{alertlevel}}'>{{message}}</div>
+        {% endif %}
+        <h1>Users Manager</h1>
+        <fieldset>
+            <legend><i class="fa fa-plus" aria-hidden="true"></i> Add</legend>
+            <form class="form-horizontal">
+                <div class="form-group">
+                    <div class="col-sm-2"></div>
+                    <div class="col-sm-4">
+                        <a href="/users" class="btn btn-success btn-block"><i class="fa fa-plus"
+                                                                               aria-hidden="true"></i> Add new user</a>
+                    </div>
+                </div>
+            </form>
+        </fieldset>
+        <br>
+        <fieldset>
+            <legend><i class="fa fa-user" aria-hidden="true"></i> Users</legend>
+            <div class="table-responsive">
+                <table id="tabela">
+                    <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Permission</th>
+                        <th>Action</th>
+                    </tr>
+                    </thead>
+
+                    <tbody>
+                    {% if users is defined %}
+                    {% for user in users %}
+                    <tr>
+                        <th scope="row">{{user.id}}</th>
+                        <td>{{user.name}}</td>
+                        <td>{{user.email}}</td>
+                        <td>{{user.permission}}</td>
+                        <td>
+                            <form action="findUser" method="post">
+                                <input type="hidden" name="userId" value="{{user.id}}">
+
+                                <button type="submit" class="btn btn-info btn-sm">
+                                    <i class="fa fa-pencil" aria-hidden="true"></i>
+                                </button>
+                            </form>
+
+                            <form action="deleteUser" method="post">
+                                <input type="hidden" name="userId" value="{{user.id}}">
+
+                                <button type="submit" class="btn btn-danger btn-sm">
+                                    <i class="fa fa-trash-o" aria-hidden="true"></i>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    {%endfor%}
+                    </tbody>
+                    {% else %}
+                    {% endif %}
+
+                </table>
+            </div>
+            <br>
+            <form class="form-horizontal" method="">
+                <div class="form-group">
+                    <div class="row" style="margin: 0px;">
+                        <div class="col-sm-2"></div>
+                        <div class="col-sm-4">
+                            <a class="btn btn-danger btn-block" href="/"><i class="fa fa-arrow-left"
+                                                                            aria-hidden="true"></i>
+                                Back
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </fieldset>
+    </div>
+    <script src="{{url_for('static', filename='styles/message.js')}}"></script>
+    <script>
+        $(document).ready(function(){
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('page').style.display = 'block';
+        });
+
+    </script>
+</div>
+</body>
+</html>

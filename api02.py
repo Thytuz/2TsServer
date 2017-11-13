@@ -4,6 +4,7 @@ import json
 from SynchronizationManager.ThingsSynchronization import ThingsSynchronization
 from ThingsManager.Locations import Locations
 from ThingsManager.Things import Things
+from ThingsManager.ThingsModel import ThingsModel
 from ThingsManager.ThingsXLocation import ThingsXLocation
 from UserManager.User import User
 from werkzeug.utils import redirect
@@ -98,7 +99,7 @@ def locations():
 def findlocation():
     if session.get('token') is None:
         return render_template('/login.html', message="You have to login to access this module", alertlevel="warning")
-    id = request.form['id']
+    id = request.form['locationId']
     location = Locations()
     locations = location.search_all_locations()
     try:
@@ -176,7 +177,7 @@ def adduser():
 def findUser():
     if session.get('token') is None:
         return render_template('/login.html', message="You have to login to access this module", alertlevel="warning")
-    id = request.form['id']
+    id = request.form['userId']
     user = User()
     users = user.search_all_users()
     try:
@@ -192,11 +193,32 @@ def findUser():
                                alertlevel="danger")
 
 
+@app.route('/deleteUser', methods=['POST'])
+def deleteUser():
+    if session.get('token') is None:
+        return render_template('/login.html', message="You have to login to access this module", alertlevel="warning")
+    userId = request.form['userId']
+    user = User()
+    try:
+        response = user.delete_user(userId)
+        users = user.search_all_users()
+        if response == True:
+            return render_template('/usersgrid.html', message="User deleted sucessfully", alertlevel="success", users=users)
+        else:
+            return render_template('/usersgrid.html', message="Error deleting user", alertlevel="warning", users=users)
+    except Exception as e:
+        return render_template('/usersgrid.html',
+                               message="A database error has occurred. Contact your system administrator",
+                               alertlevel="danger", users=users)
+
+
 @app.route('/findThing', methods=['POST'])
 def findThing():
     if session.get('token') is None:
         return render_template('/login.html', message="You have to login to access this module", alertlevel="warning")
     numThing = request.form['numeroPat']
+    location = Locations()
+    locations = location.search_all_locations()
 
     things = Things()
     try:
@@ -205,7 +227,7 @@ def findThing():
         if response == False:
             return render_template('/things.html', message="No thing found with given number", alertlevel="warning")
         else:
-            return render_template('/things.html', thing=response)
+            return render_template('/things.html', thing=response, locations=locations)
     except Exception as e:
         return render_template('/things.html',
                                message="A database error has occurred. Contact your system administrator",
@@ -247,17 +269,21 @@ def editThing():
     descricao = request.form['descricao']
     num1 = request.form['num1']
     num2 = request.form['num2']
+    localizacao = request.form['location']
     preco = request.form['preco']
     situacao = request.form['situacao']
     estado = request.form['estado']
     observacao = request.form['observacao']
-
+    thingmodel = ThingsModel(id, num1, num2, descricao, situacao, preco, estado, localizacao, observacao)
     thing = Things()
+    location = Locations()
+    locations = location.search_all_locations()
 
     try:
-        response = thing.update_thing2(id, descricao, num1, num2, preco, situacao, estado, observacao)
+        response = thing.update_thing2(id, descricao, num1, num2, localizacao, preco, situacao, estado, observacao)
         if response == True:
-            return render_template('/things.html', message="Thing successfully edited", alertlevel="success")
+            return render_template('/things.html', message="Thing successfully edited", alertlevel="success",
+                                   thing=thingmodel, locations=locations)
         else:
             return render_template('/things.html', message="Error while editing thing", alertlevel="warning")
     except Exception as e:
@@ -277,7 +303,9 @@ def voltar():
 def things():
     if session.get('token') is None:
         return render_template('/login.html', message="You have to login to access this module", alertlevel="warning")
-    return render_template('/things.html')
+    location = Locations()
+    locations = location.search_all_locations()
+    return render_template('/things.html', locations=locations)
 
 
 @app.route('/addthing', methods=['POST'])
@@ -287,6 +315,7 @@ def addthing():
     descricao = request.form['descricao']
     num1 = request.form['num1']
     num2 = request.form['num2']
+    localizacao = request.form['location']
     preco = request.form['preco']
     situacao = request.form['situacao']
     estado = request.form['estado']
@@ -294,7 +323,7 @@ def addthing():
 
     thing = Things()
     try:
-        response = thing.insert_new_thing(num1, num2, descricao, preco, situacao, estado, observacao)
+        response = thing.insert_new_thing(num1, num2, descricao, localizacao, preco, situacao, estado, observacao)
         if response == True:
             return render_template('/things.html',
                                    message="Thing successfully added",
@@ -318,7 +347,6 @@ def quit():
 
 @app.route('/thingsgrid', methods=['get'])
 def thingsgrid():
-
     if session.get('token') is None:
         return render_template('/login.html', message="You have to login to access this module", alertlevel="warning")
     acao = request.args.get("acao")
@@ -363,6 +391,24 @@ def thingsgrid():
                                alertlevel="warning")
     else:
         return render_template('/thingsgrid.html', things=response, locations=locations)
+
+
+@app.route('/usersgrid')
+def usersgrid():
+    users = User()
+    users = users.search_all_users()
+    if session.get('token') is None:
+        return render_template('/login.html', message="You have to login to access this module", alertlevel="warning")
+    return render_template('/usersgrid.html', users=users)
+
+
+@app.route('/locationsgrid')
+def locationsgrid():
+    locations = Locations()
+    locations = locations.search_all_locations()
+    if session.get('token') is None:
+        return render_template('/login.html', message="You have to login to access this module", alertlevel="warning")
+    return render_template('/locationsgrid.html', locations=locations)
 
 
 # END VIEWS
