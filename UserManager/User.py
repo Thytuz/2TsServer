@@ -109,7 +109,6 @@ class User(UserModel):
         finally:
             conn.close_connection()
 
-
     def get_users_db(self):
         try:
             sql = "SELECT * FROM usuarios"
@@ -121,11 +120,25 @@ class User(UserModel):
 
             listUsers = []
             for data in cursor.fetchall():
-                userModel = UserModel(id=data[0], name=data[1], email=data[2], permission=data[4], token = data[5])
+                userModel = UserModel(id=data[0], name=data[1], email=data[2], permission=data[4], token=data[5])
                 listUsers.append(userModel)
             return listUsers
         except Exception as e:
             print(e)
             return 'ERRO'
+        finally:
+            conn.close_connection()
+
+    def delete_user(self, userId):
+        try:
+            sql = "UPDATE usuarios SET usua_excluido = 1 WHERE usua_id = " + str(userId)
+            conn = Connection()
+            conn.execute_sql(sql)
+            conn.commit()
+            return True
+        except Exception as e:
+            conn.rollback()
+            print(e)
+            return False
         finally:
             conn.close_connection()

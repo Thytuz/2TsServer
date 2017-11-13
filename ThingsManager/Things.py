@@ -230,11 +230,11 @@ class Things(ThingsModel):
         finally:
             conn.close_connection()
 
-    def update_thing2(self, code_things, description, num1, num2, price, situation, state, note):
+    def update_thing2(self, code_things, description, num1, num2, localizacao, price, situation, state, note):
         try:
             sql = "UPDATE patr_bens SET pabe_num_patr1 = '" + str(
                 num1) + "', pabe_num_patr2 = '" + str(num2) + "', pabe_descricao = '" + str(
-                description) + "', pabe_valor = '" + str(
+                description) + "', pabe_loca_id = '" + str(localizacao) + "', pabe_valor = '" + str(
                 price) + "', pabe_dt_cadastro = CURRENT_TIMESTAMP(), pabe_situacao = '" + str(
                 situation) + "', pabe_estado = '" + str(state) + "', pabe_observacao = '" + str(
                 note) + "' WHERE pabe_id = '" + str(code_things) + "'"
@@ -249,11 +249,12 @@ class Things(ThingsModel):
         finally:
             conn.close_connection()
 
-    def insert_new_thing(self, thingNum1, thingNum2, thingName, thingPrice, thingSituation, thingCondition,
+    def insert_new_thing(self, thingNum1, thingNum2, thingName, thingLocation, thingPrice, thingSituation,
+                         thingCondition,
                          thingObservation):
         try:
-            sql = "INSERT INTO patr_bens (pabe_num_patr1, pabe_num_patr2, pabe_descricao, pabe_valor, pabe_dt_cadastro, pabe_situacao, pabe_estado, pabe_observacao, pabe_etiqueta_ativa) VALUES('" + str(
-                thingNum1) + "','" + str(thingNum2) + "','" + str(thingName) + "','" + str(
+            sql = "INSERT INTO patr_bens (pabe_num_patr1, pabe_num_patr2, pabe_descricao, pabe_loca_id, pabe_valor, pabe_dt_cadastro, pabe_situacao, pabe_estado, pabe_observacao, pabe_etiqueta_ativa) VALUES('" + str(
+                thingNum1) + "','" + str(thingNum2) + "','" + str(thingName) + "','" + str(thingLocation) + "','" + str(
                 thingPrice) + "', CURRENT_TIMESTAMP() ,'" + str(thingSituation) + "','" + str(
                 thingCondition) + "','" + str(thingObservation) + "', '0')"
             conn = Connection()
