@@ -305,35 +305,6 @@ class Things(ThingsModel):
         finally:
             conn.close_connection()
 
-    def get_all_things_db(self):
-        try:
-            conn = Connection()
-            cursor = conn.execute_sql("SELECT pabe_id, pabe_num_patr1, pabe_num_patr2, pabe_descricao,"
-                                      " pabe_situacao, pabe_valor, pabe_dt_cadastro, pabe_estado,"
-                                      " pabe_observacao, pabe_etiqueta_ativa, pabe_loca_id"
-                                      " FROM patr_bens")
-            if cursor.rowcount == 0:
-                return False
-            listThings = []
-            for data in cursor.fetchall():
-                thingsModel = ThingsModel(code_things=str(data[0]), nr_things1=str("0" if data[1] == None else data[1]),
-                                          nr_things2=str("0" if data[2] == None else data[2]),
-                                          description=str("" if data[3] == None else data[3]),
-                                          situation=str("" if data[4] == None else data[4]),
-                                          value=str("0" if data[5] == None else data[5]),
-                                          date_registre=str("" if data[6] == None else data[6]),
-                                          state=str("" if data[7] == None else data[7]),
-                                          note=str("" if data[8] == None else data[8]),
-                                          tag_activated=str("0" if data[9] == None else data[9]),
-                                          location=str("0" if data[10] == None else data[10]))
-                listThings.append(thingsModel)
-
-            return listThings
-        except Exception as e:
-            print(e)
-            return 'ERRO'
-        finally:
-            conn.close_connection()
 
     def search_all_things(self):
         try:
@@ -371,5 +342,33 @@ class Things(ThingsModel):
         except Exception as e:
             print(e)
             return 'ERRO'
+        finally:
+            conn.close_connection()
+
+    def generate_sql_insert_things(self):
+        try:
+            conn = Connection()
+
+            data = ""
+
+            cursor = conn.execute_sql("SELECT * FROM `patr_bens`;")
+            for row in cursor.fetchall():
+                data += "INSERT INTO `patr_bens` VALUES("
+                first = True
+                for field in row:
+                    if not first:
+                        data += ', '
+                    if field == None:
+                        data += 'null'
+                    else:
+                        data += '"' + str("" if field == None else field) + '"'
+
+                    first = False
+
+                data += ");\n"
+            data += "\n\n"
+            return data
+        except Exception as e:
+            return False
         finally:
             conn.close_connection()

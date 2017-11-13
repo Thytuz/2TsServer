@@ -74,22 +74,30 @@ class Locations(LocationModel):
 
 
 
-    def get_all_locations_db(self):
+    def generate_sql_insert_locations(self):
         try:
-            sql = "SELECT * FROM localizacao"
             conn = Connection()
-            cursor = conn.execute_sql(sql)
 
-            if (cursor.rowcount == 0):
-                return False
+            data = ""
 
-            listLocations = []
-            for data in cursor.fetchall():
-                locationModel = LocationModel(loca_id=data[0], loca_room=data[1])
-                listLocations.append(locationModel)
-            return listLocations
+            cursor = conn.execute_sql("SELECT * FROM `localizacao`;")
+            for row in cursor.fetchall():
+                data += "INSERT INTO `localizacao` VALUES("
+                first = True
+                for field in row:
+                    if not first:
+                        data += ', '
+                    if field == None:
+                        data += 'null'
+                    else:
+                        data += '"' + str("" if field == None else field) + '"'
+
+                    first = False
+
+                data += ");\n"
+            data += "\n\n"
+            return data
         except Exception as e:
-            print(e)
-            return 'ERRO'
+            return False
         finally:
             conn.close_connection()

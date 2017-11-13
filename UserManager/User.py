@@ -110,22 +110,30 @@ class User(UserModel):
             conn.close_connection()
 
 
-    def get_users_db(self):
+    def generate_sql_insert_users(self):
         try:
-            sql = "SELECT * FROM usuarios"
             conn = Connection()
-            cursor = conn.execute_sql(sql)
 
-            if (cursor.rowcount == 0):
-                return False
+            data = ""
 
-            listUsers = []
-            for data in cursor.fetchall():
-                userModel = UserModel(id=data[0], name=data[1], email=data[2], permission=data[4], token = data[5])
-                listUsers.append(userModel)
-            return listUsers
+            cursor = conn.execute_sql("SELECT * FROM `usuarios`;")
+            for row in cursor.fetchall():
+                data += "INSERT INTO `usuarios` VALUES("
+                first = True
+                for field in row:
+                    if not first:
+                        data += ', '
+                    if field == None:
+                        data += 'null'
+                    else:
+                        data += '"' + str("" if field == None else field) + '"'
+
+                    first = False
+
+                data += ");\n"
+            data += "\n\n"
+            return data
         except Exception as e:
-            print(e)
-            return 'ERRO'
+            return False
         finally:
             conn.close_connection()

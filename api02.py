@@ -633,7 +633,8 @@ def get_locations_db(token):
         return jsonify({'response': 'Token Invalido'})
 
     location = Locations()
-    return json.dumps(para_dict(location.get_all_locations_db()))
+    return location.generate_sql_insert_locations()
+    # return json.dumps(para_dict(location.get_all_locations_db()))
 
 
 @app.route('/get_things_db/token=<string:token>', methods=['GET'])
@@ -642,8 +643,9 @@ def get_things_db(token):
         return jsonify({'response': 'Token Invalido'})
 
     things = Things()
+    return  things.generate_sql_insert_things()
 
-    return json.dumps(para_dict(things.get_all_things_db()))
+    #return json.dumps(para_dict(things.get_all_things_db()))
 
 
 @app.route('/get_things_location_db/token=<string:token>', methods=['GET'])
@@ -652,8 +654,8 @@ def get_things_location_db(token):
         return jsonify({'response': 'Token Invalido'})
 
     things_location = ThingsXLocation()
-
-    return json.dumps(para_dict(things_location.get_things_x_location_db()))
+    return things_location.generate_sql_insert_things_x_location()
+    #return json.dumps(para_dict(things_location.get_things_x_location_db()))
 
 
 @app.route('/get_users_db/token=<string:token>', methods=['GET'])
@@ -662,12 +664,12 @@ def get_users_db(token):
         return jsonify({'response': 'Token Invalido'})
 
     user = User()
-
-    return json.dumps(para_dict(user.get_users_db()))
+    return user.generate_sql_insert_users()
+    #return json.dumps(para_dict(user.get_users_db()))
 
 
 # if __name__ == "__main__":
 #     port = int(os.environ.get("PORT", 5000))
 #     app.run(host='0.0.0.0', port=port)
 if __name__ == '__main__':
-    app.run(debug=True, port=8080)
+    app.run( debug=True, port=8080)
