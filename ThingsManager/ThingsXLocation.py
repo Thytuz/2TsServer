@@ -5,11 +5,11 @@ from ThingsManager.ThingsXLocationModel import ThingsXLocationModel
 
 
 class ThingsXLocation(object):
-
     """
     busca coisas que pertencem a uma localização
     mas não foi encontrado
     """
+
     def search_things_missing_by_location(self, loca_id):
         try:
             sql = "SELECT pabe_id, pabe_num_patr1, pabe_num_patr2," \
@@ -21,7 +21,8 @@ class ThingsXLocation(object):
                   " FROM patr_bens_x_localizacao INNER JOIN patr_bens ON pabe_id = pblo_pabe_id" \
                   " INNER JOIN localizacao AS loca_1 ON loca_1.loca_id = pabe_loca_id" \
                   " INNER JOIN localizacao AS loca_2 ON loca_2.loca_id = pblo_loca_id" \
-                  " WHERE pabe_excluido = 0 AND pblo_loca_id <> '"+str(loca_id)+"' AND pabe_loca_id ='"+str(loca_id)+"'"
+                  " WHERE pabe_excluido = 0 AND pblo_loca_id <> '" + str(loca_id) + "' AND pabe_loca_id ='" + str(
+                loca_id) + "'"
             print(sql)
             conn = Connection()
             cursor = conn.execute_sql(sql)
@@ -62,6 +63,7 @@ class ThingsXLocation(object):
     """
     busca coisas que não pertencem a determinada localização, mas estão la
     """
+
     def search_things_over_by_location(self, loca_id):
         try:
             conn = Connection()
@@ -75,7 +77,8 @@ class ThingsXLocation(object):
                                       " FROM patr_bens_x_localizacao INNER JOIN patr_bens ON pabe_id = pblo_pabe_id"
                                       " INNER JOIN localizacao AS loca_1 ON loca_1.loca_id = pabe_loca_id"
                                       " INNER JOIN localizacao AS loca_2 ON loca_2.loca_id = pblo_loca_id"
-                                      " WHERE pabe_excluido = 0 AND pblo_loca_id ='"+str(loca_id)+"' AND pabe_loca_id <>'"+str(loca_id)+"'")
+                                      " WHERE pabe_excluido = 0 AND pblo_loca_id ='" + str(
+                loca_id) + "' AND pabe_loca_id <>'" + str(loca_id) + "'")
             if cursor.rowcount == 0:
                 return False
             listThings = []
@@ -110,13 +113,13 @@ class ThingsXLocation(object):
         finally:
             conn.close_connection()
 
-
     def check_thing_location_exists(self, nr_things1):
         try:
-            sql = "SELECT * FROM patr_bens_x_localizacao INNER JOIN patr_bens ON pblo_pabe_id = pabe_id WHERE pabe_excluido = 0 AND pabe_num_patr1 =  "+ str(nr_things1)
+            sql = "SELECT * FROM patr_bens_x_localizacao INNER JOIN patr_bens ON pblo_pabe_id = pabe_id WHERE pabe_excluido = 0 AND pabe_num_patr1 =  " + str(
+                nr_things1)
             conn = Connection()
             cursor = conn.execute_sql(sql)
-            if(cursor.rowcount == 0):
+            if (cursor.rowcount == 0):
                 return False
             return True
         except Exception as e:
@@ -127,7 +130,8 @@ class ThingsXLocation(object):
 
     def insert_patr_bens_x_localizacao(self, pabe_id, loca_id, user):
         try:
-            sql = "INSERT INTO patr_bens_x_localizacao (pblo_pabe_id, pblo_loca_id, pblo_usua_id) VALUES('"+str(pabe_id)+"', '"+str(loca_id)+"', '"+str(user)+"')"
+            sql = "INSERT INTO patr_bens_x_localizacao (pblo_pabe_id, pblo_loca_id, pblo_usua_id) VALUES('" + str(
+                pabe_id) + "', '" + str(loca_id) + "', '" + str(user) + "')"
             conn = Connection()
             conn.execute_sql(sql)
             conn.commit()
@@ -139,10 +143,10 @@ class ThingsXLocation(object):
         finally:
             conn.close_connection()
 
-
     def update_thing_location(self, pabe_id, loca_id, user):
         try:
-            sql = "UPDATE patr_bens_x_localizacao SET pblo_loca_id = '"+str(loca_id)+"', pblo_usua_id = '"+str(user)+"' WHERE pblo_pabe_id = "+pabe_id
+            sql = "UPDATE patr_bens_x_localizacao SET pblo_loca_id = '" + str(loca_id) + "', pblo_usua_id = '" + str(
+                user) + "', pblo_dt_ultima_leitura = CURRENT_TIMESTAMP() WHERE pblo_pabe_id = " + pabe_id
             conn = Connection()
             conn.execute_sql(sql)
             conn.commit()
@@ -156,10 +160,10 @@ class ThingsXLocation(object):
 
     def get_location_current(self, pabe_id):
         try:
-            sql = "SELECT pblo_loca_id FROM patr_bens_x_localizacao WHERE pblo_pabe_id =  "+ str(pabe_id)
+            sql = "SELECT pblo_loca_id FROM patr_bens_x_localizacao WHERE pblo_pabe_id =  " + str(pabe_id)
             conn = Connection()
             cursor = conn.execute_sql(sql)
-            if(cursor.rowcount == 0):
+            if (cursor.rowcount == 0):
                 return False
             return cursor.fetchone()[0]
         except Exception as e:
@@ -167,7 +171,6 @@ class ThingsXLocation(object):
             return 'ERRO'
         finally:
             conn.close_connection()
-
 
     def generate_sql_insert_things_x_location(self):
         try:
