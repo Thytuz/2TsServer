@@ -17,9 +17,9 @@
             <legend><i class="fa fa-search" aria-hidden="true"></i> Search</legend>
             <form class="form-horizontal" action="findlocation" method="post">
                 <div class="form-group">
-                    <label class="control-label col-sm-2" for="id">*Locations: </label>
+                    <label class="control-label col-sm-2" for="locationId">*Locations: </label>
                     <div class="col-sm-10">
-                        <select class="form-control" id="id" name="id">
+                        <select class="form-control" id="locationId" name="locationId">
                             {%for location in locations%}
                             <option value="{{location.loca_id}}">{{location.loca_room}}</option>
                             {%endfor%}

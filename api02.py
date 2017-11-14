@@ -153,7 +153,6 @@ def adduser():
     if session.get('token') is None:
         return render_template('/login.html', message="You have to login to access this module", alertlevel="warning")
     user = User()
-    users = user.search_all_users()
     nome = request.form['name']
     email = request.form['email']
     senha = request.form['password']
@@ -162,6 +161,7 @@ def adduser():
 
     try:
         response = user.insert_new_user(nome, email, senha, token, permissao)
+        users = user.search_all_users()
         if response == True:
             return render_template('/users.html', message="User added successfully", alertlevel="success", users=users)
         else:
@@ -171,6 +171,28 @@ def adduser():
         return render_template('/users.html',
                                message="A database error has occurred. Contact your system administrator",
                                alertlevel="danger", users=users)
+
+
+@app.route('/addlocation', methods=['POST'])
+def addlocation():
+    if session.get('token') is None:
+        return render_template('/login.html', message="You have to login to access this module", alertlevel="warning")
+    locationBD = Locations()
+    locaNome = request.form['name']
+    try:
+        response = locationBD.insert_location(locaNome)
+        locations = locationBD.search_all_locations()
+        if response == True:
+            return render_template('/locations.html', message="Location added successfully", alertlevel="success",
+                                   locations=locations)
+        else:
+            return render_template('/locations.html', message="Error adding location", alertlevel="danger",
+                                   locations=locations)
+
+    except Exception as e:
+        return render_template('/locations.html',
+                               message="A database error has occurred. Contact your system administrator",
+                               alertlevel="danger", locations=locations)
 
 
 @app.route('/findUser', methods=['POST'])
@@ -203,13 +225,45 @@ def deleteUser():
         response = user.delete_user(userId)
         users = user.search_all_users()
         if response == True:
-            return render_template('/usersgrid.html', message="User deleted sucessfully", alertlevel="success", users=users)
+            return render_template('/usersgrid.html', message="User deleted sucessfully", alertlevel="success",
+                                   users=users)
         else:
             return render_template('/usersgrid.html', message="Error deleting user", alertlevel="warning", users=users)
     except Exception as e:
         return render_template('/usersgrid.html',
                                message="A database error has occurred. Contact your system administrator",
                                alertlevel="danger", users=users)
+
+
+@app.route('/deleteLocation', methods=['POST'])
+def deleteLocation():
+    if session.get('token') is None:
+        return render_template('/login.html', message="You have to login to access this module", alertlevel="warning")
+    locaId = request.form['locationId']
+    things = Things()
+    locationsBD = Locations()
+    try:
+        locations = locationsBD.search_all_locations()
+        response = things.search_things_by_location(locaId)
+        if response == False:
+            response = locationsBD.delete_location(locaId)
+            locations = locationsBD.search_all_locations()
+            if response == True:
+                return render_template('/locationsgrid.html', message="Location deleted sucessfully",
+                                       alertlevel="success", locations=locations)
+            else:
+                return render_template('/locationsgrid.html',
+                                       message="A database error has occurred. Contact your system administrator",
+                                       alertlevel="danger", locations=locations)
+        else:
+            return render_template('/locationsgrid.html',
+                                   message="You can't delete locations with things associated with",
+                                   alertlevel="warning", locations=locations)
+    except Exception as e:
+        print(e)
+        return render_template('/locationsgrid.html',
+                               message="A database error has occurred. Contact your system administrator",
+                               alertlevel="danger", locations=locations)
 
 
 @app.route('/findThing', methods=['POST'])
@@ -328,11 +382,14 @@ def addthing():
             return render_template('/things.html',
                                    message="Thing successfully added",
                                    alertlevel="success")
+        elif response == '1062':
+            return render_template('/things.html',
+                                   message="There's a thing registered with the given number",
+                                   alertlevel="danger")
         else:
             return render_template('/things.html',
-                                   message="Error adding thing",
+                                   message="Error",
                                    alertlevel="danger")
-
     except Exception as e:
         return render_template('/things.html',
                                message="A database error has occurred. Contact your system administrator",
@@ -689,9 +746,9 @@ def get_things_db(token):
         return jsonify({'response': 'Token Invalido'})
 
     things = Things()
-    return  things.generate_sql_insert_things()
+    return things.generate_sql_insert_things()
 
-    #return json.dumps(para_dict(things.get_all_things_db()))
+    # return json.dumps(para_dict(things.get_all_things_db()))
 
 
 @app.route('/get_things_location_db/token=<string:token>', methods=['GET'])
@@ -701,7 +758,7 @@ def get_things_location_db(token):
 
     things_location = ThingsXLocation()
     return things_location.generate_sql_insert_things_x_location()
-    #return json.dumps(para_dict(things_location.get_things_x_location_db()))
+    # return json.dumps(para_dict(things_location.get_things_x_location_db()))
 
 
 @app.route('/get_users_db/token=<string:token>', methods=['GET'])
@@ -711,11 +768,11 @@ def get_users_db(token):
 
     user = User()
     return user.generate_sql_insert_users()
-    #return json.dumps(para_dict(user.get_users_db()))
+    # return json.dumps(para_dict(user.get_users_db()))
 
 
 # if __name__ == "__main__":
 #     port = int(os.environ.get("PORT", 5000))
 #     app.run(host='0.0.0.0', port=port)
 if __name__ == '__main__':
-    app.run( debug=True, port=8080)
+    app.run(debug=True, port=8080)

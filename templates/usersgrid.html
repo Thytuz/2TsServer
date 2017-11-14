@@ -19,8 +19,6 @@
 }
 
 
-
-
 </style>
 <head>
     {% include 'header.html' %}
@@ -45,7 +43,7 @@
                     <div class="col-sm-2"></div>
                     <div class="col-sm-4">
                         <a href="/users" class="btn btn-success btn-block"><i class="fa fa-plus"
-                                                                               aria-hidden="true"></i> Add new user</a>
+                                                                              aria-hidden="true"></i> Add new user</a>
                     </div>
                 </div>
             </form>
@@ -74,7 +72,7 @@
                         <td>{{user.email}}</td>
                         <td>{{user.permission}}</td>
                         <td>
-                            <form action="findUser" method="post">
+                            <form style="display: inline-block;" action="findUser" method="post">
                                 <input type="hidden" name="userId" value="{{user.id}}">
 
                                 <button type="submit" class="btn btn-info btn-sm">
@@ -82,10 +80,10 @@
                                 </button>
                             </form>
 
-                            <form action="deleteUser" method="post">
+                            <form style="display: inline-block;" action="deleteUser" method="post">
                                 <input type="hidden" name="userId" value="{{user.id}}">
 
-                                <button type="submit" class="btn btn-danger btn-sm">
+                                <button type="submit" class="btn btn-danger btn-sm" Onclick="return ConfirmDelete();">
                                     <i class="fa fa-trash-o" aria-hidden="true"></i>
                                 </button>
                             </form>
@@ -115,6 +113,7 @@
         </fieldset>
     </div>
     <script src="{{url_for('static', filename='styles/message.js')}}"></script>
+    <script src="{{url_for('static', filename='scripts/excluir.js')}}"></script>
     <script>
         $(document).ready(function(){
             document.getElementById('loading').style.display = 'none';

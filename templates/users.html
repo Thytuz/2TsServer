@@ -18,9 +18,9 @@
             <legend><i class="fa fa-search" aria-hidden="true"></i> Search</legend>
             <form class="form-horizontal" action="findUser" method="post">
                 <div class="form-group">
-                    <label class="control-label col-sm-2" for="id">*Users: </label>
+                    <label class="control-label col-sm-2" for="userId">*Users: </label>
                     <div class="col-sm-10">
-                        <select class="form-control" id="id" name="id">
+                        <select class="form-control" id="userId" name="userId">
                             {%for user in users%}
                             <option value="{{user.id}}">{{user.name}}</option>
                             {%endfor%}

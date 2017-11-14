@@ -59,7 +59,7 @@ class Locations(LocationModel):
 
     def edit_location(self, loca_id, loca_room):
         try:
-            sql = "UPDATE localizacao set loca_sala = '" + str(loca_room) + "' WHERE loca_id =  " + str(loca_id) + ""
+            sql = "UPDATE localizacao set loca_sala = '" + str(loca_room) + "', loca_data_atualizacao = CURRENT_TIMESTAMP() WHERE loca_id =  " + str(loca_id) + ""
             print(sql);
             conn = Connection()
             conn.execute_sql(sql)
@@ -72,6 +72,19 @@ class Locations(LocationModel):
         finally:
             conn.close_connection()
 
+    def delete_location(self, loca_id):
+        try:
+            sql = "UPDATE localizacao set loca_excluido = 1, loca_data_atualizacao = CURRENT_TIMESTAMP() WHERE loca_id =  " + str(loca_id)
+            conn = Connection()
+            conn.execute_sql(sql)
+            conn.commit()
+            return True
+        except Exception as e:
+            conn.rollback()
+            print(e)
+            return False
+        finally:
+            conn.close_connection()
 
 
     def generate_sql_insert_locations(self):

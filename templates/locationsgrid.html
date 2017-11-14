@@ -22,6 +22,7 @@
 
 
 
+
 </style>
 <head>
     {% include 'header.html' %}
@@ -72,11 +73,19 @@
                         <th scope="row">{{location.loca_id}}</th>
                         <td>{{location.loca_room}}</td>
                         <td>
-                            <form action="findlocation" method="post">
+                            <form style="display: inline-block;" action="findlocation" method="post">
                                 <input type="hidden" name="locationId" value="{{location.loca_id}}">
 
                                 <button type="submit" class="btn btn-info btn-sm">
                                     <i class="fa fa-pencil" aria-hidden="true"></i>
+                                </button>
+                            </form>
+
+                            <form style="display: inline-block;" action="deleteLocation" method="post">
+                                <input type="hidden" name="locationId" value="{{location.loca_id}}">
+
+                                <button type="submit" class="btn btn-danger btn-sm" Onclick="return ConfirmDelete();">
+                                    <i class="fa fa-trash-o" aria-hidden="true"></i>
                                 </button>
                             </form>
                         </td>
@@ -105,11 +114,13 @@
         </fieldset>
     </div>
     <script src="{{url_for('static', filename='styles/message.js')}}"></script>
+    <script src="{{url_for('static', filename='scripts/excluir.js')}}"></script>
     <script>
         $(document).ready(function(){
             document.getElementById('loading').style.display = 'none';
             document.getElementById('page').style.display = 'block';
         });
+
 
 
     </script>

@@ -61,7 +61,7 @@ class User(UserModel):
         try:
             sql = "UPDATE usuarios set usua_nome = '" + str(name) + "', usua_email = '" + str(
                 email) + "', usua_senha='" + str(password) + "', usua_permissao = '" + str(
-                permission) + "' WHERE usua_id =  " + str(id) + ""
+                permission) + ", usua_data_atualizacao = CURRENT_TIMESTAMP()' WHERE usua_id =  " + str(id) + ""
             conn = Connection()
             conn.execute_sql(sql)
             conn.commit()
@@ -106,6 +106,20 @@ class User(UserModel):
         except Exception as e:
             print(e)
             return 'ERRO'
+        finally:
+            conn.close_connection()
+
+    def delete_user(self, userId):
+        try:
+            sql = "UPDATE usuarios set usua_excluido = 1, usua_data_atualizacao = CURRENT_TIMESTAMP() WHERE usua_id =  " + str(userId)
+            conn = Connection()
+            conn.execute_sql(sql)
+            conn.commit()
+            return True
+        except Exception as e:
+            conn.rollback()
+            print(e)
+            return False
         finally:
             conn.close_connection()
 

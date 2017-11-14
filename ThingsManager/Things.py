@@ -203,7 +203,8 @@ class Things(ThingsModel):
 
     def active_things_by_num1(self, nr_things1):
         try:
-            sql = "UPDATE patr_bens set pabe_etiqueta_ativa = 1 WHERE pabe_num_patr1 = " + str(nr_things1)
+            sql = "UPDATE patr_bens set pabe_etiqueta_ativa = 1, pabe_data_atualizacao = CURRENT_TIMESTAMP() WHERE pabe_num_patr1 = " + str(
+                nr_things1)
             conn = Connection()
             conn.execute_sql(sql)
             conn.commit()
@@ -218,7 +219,8 @@ class Things(ThingsModel):
     def update_thing(self, code_things, situation, state, note):
         try:
             sql = "UPDATE patr_bens SET pabe_situacao = '" + str(situation) + "', pabe_estado = '" + str(
-                state) + "', pabe_observacao = '" + str(note) + "' WHERE pabe_id = " + code_things
+                state) + "', pabe_observacao = '" + str(
+                note) + "', pabe_data_atualizacao = CURRENT_TIMESTAMP() WHERE pabe_id = " + code_things
             conn = Connection()
             conn.execute_sql(sql)
             conn.commit()
@@ -237,7 +239,7 @@ class Things(ThingsModel):
                 description) + "', pabe_loca_id = '" + str(localizacao) + "', pabe_valor = '" + str(
                 price) + "', pabe_dt_cadastro = CURRENT_TIMESTAMP(), pabe_situacao = '" + str(
                 situation) + "', pabe_estado = '" + str(state) + "', pabe_observacao = '" + str(
-                note) + "' WHERE pabe_id = '" + str(code_things) + "'"
+                note) + "', pabe_data_atualizacao = CURRENT_TIMESTAMP() WHERE pabe_id = '" + str(code_things) + "'"
             conn = Connection()
             conn.execute_sql(sql)
             conn.commit()
@@ -262,8 +264,9 @@ class Things(ThingsModel):
             conn.commit()
             return True
         except Exception as e:
+            if ((str(e)[1:5]) == '1062'):
+                return '1062'
             conn.rollback()
-            print(e)
             return False
         finally:
             conn.close_connection()
@@ -305,7 +308,6 @@ class Things(ThingsModel):
             return 'ERRO'
         finally:
             conn.close_connection()
-
 
     def search_all_things(self):
         try:
