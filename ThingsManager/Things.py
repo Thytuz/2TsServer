@@ -216,11 +216,10 @@ class Things(ThingsModel):
         finally:
             conn.close_connection()
 
-    def update_thing(self, code_things, situation, state, note):
+    def update_thing(self, code_things, situation, state, note, location):
         try:
             sql = "UPDATE patr_bens SET pabe_situacao = '" + str(situation) + "', pabe_estado = '" + str(
-                state) + "', pabe_observacao = '" + str(
-                note) + "', pabe_data_atualizacao = CURRENT_TIMESTAMP() WHERE pabe_id = " + code_things
+                state) + "', pabe_observacao = '" + str(note) + "', pabe_loca_id = '"+str(location)+"' pabe_data_atualizacao = CURRENT_TIMESTAMP() WHERE pabe_id = " + code_things
             conn = Connection()
             conn.execute_sql(sql)
             conn.commit()

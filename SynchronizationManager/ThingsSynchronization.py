@@ -33,7 +33,7 @@ class ThingsSynchronization(object):
         else:
             return 'Ocorreu um erro ao verificar se a coisa existe'
 
-    def synchronize_things(self, nr_things1, situation, state, note, user,current_location):
+    def synchronize_things(self, nr_things1, situation, state, note, user,current_location, location):
         things = Things()
         thingsXLocation = ThingsXLocation()
 
@@ -41,7 +41,7 @@ class ThingsSynchronization(object):
         thingsExists = things.search_things_by_num1(nr_things1)
         if thingsExists != False:
             pabe_id = thingsExists.code_things
-            update = things.update_thing( pabe_id, situation, state, note)
+            update = things.update_thing( pabe_id, situation, state, note, location)
             if update == False:
                 return 'Ocorreu um erro ao atualizar o objeto'
 

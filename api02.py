@@ -685,9 +685,9 @@ def synchronize_location(token, location, num_patr):
 
 
 @app.route(
-    '/edit_thing/token=<string:token>&num=<string:num_patr>&locaid=<string:location>&situation=<string:situation>&state=<string:state>&note=<string:note>',
+    '/edit_thing/token=<string:token>&num=<string:num_patr>&locaid=<string:location_c>&situation=<string:situation>&state=<string:state>&note=<string:note>&location_current=<string:location>',
     methods=['GET'])
-def edit_things(token, num_patr, location, situation, state, note):
+def edit_things(token, num_patr, location_c, situation, state, note, location):
     # verifica validade do token
     user = User()
     resp = user.verify_token(token)
@@ -699,7 +699,7 @@ def edit_things(token, num_patr, location, situation, state, note):
         user_id = resp.id
 
     thingsSynchronization = ThingsSynchronization()
-    response = thingsSynchronization.synchronize_things(num_patr, situation, state, note, user_id, location)
+    response = thingsSynchronization.synchronize_things(num_patr, situation, state, note, user_id, location_c,location)
     if response == True:
         return jsonify({"response": "OK"})
     else:
