@@ -685,7 +685,7 @@ def synchronize_location(token, location, num_patr):
 
 
 @app.route(
-    '/edit_thing/token=<string:token>&num=<string:num_patr>&locaid=<string:location_c>&situation=<string:situation>&state=<string:state>&note=<string:note>&location_current=<string:location>',
+    '/edit_thing/token=<string:token>&num=<string:num_patr>&locaid_c=<string:location_c>&situation=<string:situation>&state=<string:state>&note=<string:note>&locaid=<string:location>',
     methods=['GET'])
 def edit_things(token, num_patr, location_c, situation, state, note, location):
     # verifica validade do token
